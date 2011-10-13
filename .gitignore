@@ -1,3 +1,7 @@
+# Files
 *.iml
 *.ipr
 *.iws
+
+#Folders
+/target
