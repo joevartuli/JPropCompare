@@ -5,7 +5,6 @@ import jpropcompare.comparator.ComparePropertyFile;
 import jpropcompare.exception.ActionNotFoundException;
 import jpropcompare.exception.ComparatorException;
 import jpropcompare.loading.strategy.LoadingStrategy;
-import jpropcompare.loading.strategy.NewsLoadingStrategy;
 import jpropcompare.exception.LoadingStrategyException;
 import jpropcompare.output.ConsoleOutput;
 import jpropcompare.output.FileOutput;
@@ -114,7 +113,7 @@ public class Comparator {
     private void instantiateLoadClass() throws LoadingStrategyException {
         try {
             Class<?> loadedClass = this.getClass().getClassLoader().loadClass(loadingStrategyClassName);
-            if (loadedClass.isAssignableFrom(NewsLoadingStrategy.class)) {
+            if (loadedClass.isAssignableFrom(LoadingStrategy.class)) {
                 try {
                     loadingStrategy = (LoadingStrategy) loadedClass.newInstance();
                     loadingStrategy.setPropertyName1(propertyName1);
