@@ -80,11 +80,11 @@ public class Comparator {
         if (isArgumentValid()) {
             try {
                 if (loadingStrategyClassName != null) {
-                    instantiateLoadClass();
+                    instantiateLoadingStrategy();
                 }
 
                 if (actionName != null) {
-                    getAction();
+                    determineActionToPerform();
                 }
 
                 Output output;
@@ -110,7 +110,7 @@ public class Comparator {
         }
     }
 
-    private void instantiateLoadClass() throws LoadingStrategyException {
+    private void instantiateLoadingStrategy() throws LoadingStrategyException {
         try {
             Class<?> loadedClass = this.getClass().getClassLoader().loadClass(loadingStrategyClassName);
             if (loadedClass.isAssignableFrom(LoadingStrategy.class)) {
@@ -134,7 +134,7 @@ public class Comparator {
         return new FileOutput(this.outputFilename);
     }
 
-    private void getAction() throws ActionNotFoundException {
+    private void determineActionToPerform() throws ActionNotFoundException {
         this.action = Action.getAction(actionName);
         if (this.action == null) {
             throw new ActionNotFoundException(Constants.ACTION_NOT_FOUND.replace(Constants.REQUESTED_ACTION, actionName));

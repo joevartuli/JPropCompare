@@ -8,6 +8,7 @@ import jpropcompare.utilities.PropertyUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -20,10 +21,10 @@ import java.util.Set;
  */
 public class ComparePropertyFile {
 
-    private Properties propertyFile1;
-    private Properties propertyFile2;
-    private String fileName1;
-    private String fileName2;
+    private Properties propertyFileOne;
+    private Properties propertyFileTwo;
+    private String fileNameOne;
+    private String fileNameTwo;
     private Action action;
     private Output output;
 
@@ -36,53 +37,53 @@ public class ComparePropertyFile {
     public ComparePropertyFile(LoadingStrategy strategy, Action action, Output output) {
         this.action = action;
         this.output = output;
-        this.propertyFile1 = strategy.getPropertyFile1();
-        this.fileName1 = strategy.getPropertyName1();
-        this.propertyFile2 = strategy.getPropertyFile2();
-        this.fileName2 = strategy.getPropertyName2();
+        this.propertyFileOne = strategy.getPropertyFile1();
+        this.fileNameOne = strategy.getPropertyName1();
+        this.propertyFileTwo = strategy.getPropertyFile2();
+        this.fileNameTwo = strategy.getPropertyName2();
     }
 
     /**
      * Initialises this class with a the two file names of the property file, action to perform and an output class
-     * @param fileName1 - file name representing the first property file used in the comparison. Needs to be on the classpath
-     * @param fileName2 - file name representing the second property file used in the comparison. Needs to be on the classpath
+     * @param fileNameOne - file name representing the first property file used in the comparison. Needs to be on the classpath
+     * @param fileNameTwo - file name representing the second property file used in the comparison. Needs to be on the classpath
      * @param action - action to perform on the property files
      * @param output - where to output the results
      */
-    public ComparePropertyFile(String fileName1, String fileName2, Action action, Output output) {
+    public ComparePropertyFile(String fileNameOne, String fileNameTwo, Action action, Output output) {
 
-        if (fileName1 == null || fileName1.trim().equals("")) {
-            throw new IllegalArgumentException("fileName1 can not be null or empty");
+        if (fileNameOne == null || fileNameOne.trim().equals("")) {
+            throw new IllegalArgumentException("fileNameOne can not be null or empty");
         }
 
-        if (fileName2 == null || fileName2.trim().equals("")) {
-            throw new IllegalArgumentException("fileName2 can not be null or empty");
+        if (fileNameTwo == null || fileNameTwo.trim().equals("")) {
+            throw new IllegalArgumentException("fileNameTwo can not be null or empty");
         }
 
         this.action = action;
         this.output = output;
-        this.fileName1 = fileName1;
-        this.fileName2 = fileName2;
+        this.fileNameOne = fileNameOne;
+        this.fileNameTwo = fileNameTwo;
 
 
         try {
-            InputStream inputStream1 = this.getClass().getClassLoader().getResourceAsStream(fileName1);
-            propertyFile1 = new Properties();
-            propertyFile1.load(inputStream1);
+            InputStream inputStream1 = this.getClass().getClassLoader().getResourceAsStream(fileNameOne);
+            propertyFileOne = new Properties();
+            propertyFileOne.load(inputStream1);
         } catch (NullPointerException e) {
-            throw new NullPointerException("Could not find property file with name " + fileName1);
+            throw new NullPointerException("Could not find property file with name " + fileNameOne);
         } catch (IOException e) {
-            throw new IllegalArgumentException("An exception occurred when loading property file with name " + fileName1, e);
+            throw new IllegalArgumentException("An exception occurred when loading property file with name " + fileNameOne, e);
         }
 
         try {
-            InputStream inputStream2 = this.getClass().getClassLoader().getResourceAsStream(fileName2);
-            propertyFile2 = new Properties();
-            propertyFile2.load(inputStream2);
+            InputStream inputStream2 = this.getClass().getClassLoader().getResourceAsStream(fileNameTwo);
+            propertyFileTwo = new Properties();
+            propertyFileTwo.load(inputStream2);
         } catch (NullPointerException e) {
-            throw new NullPointerException("Could not find property file with name " + fileName1);
+            throw new NullPointerException("Could not find property file with name " + fileNameOne);
         }  catch (IOException e) {
-            throw new IllegalArgumentException("An exception occurred when loading file with name " + fileName2, e);
+            throw new IllegalArgumentException("An exception occurred when loading file with name " + fileNameTwo, e);
         }
 
     }
@@ -90,13 +91,15 @@ public class ComparePropertyFile {
     /**
      *  Executes the specific action over the given property files
      */
-    public void execute() {
+    public ComparisonResult execute() {
+        ComparisonResult result = null;
         switch (action) {
             case UNIQUE_NAMES:
-                uniquePropertyNames();
+                result = uniquePropertyNames();
                 break;
         }
         output.finalise();
+        return result;
     }
 
     /**
@@ -104,36 +107,42 @@ public class ComparePropertyFile {
      *  for determining property differences between environment properties where you would normally
      *  expect values to be different but have property names consistent
      */
-    private void uniquePropertyNames() {
+    private ComparisonResult uniquePropertyNames() {
 
-        Set<String> propertyNamesFrom1 = propertyFile1.stringPropertyNames();
-        Set<String> propertyNamesFrom2 = propertyFile2.stringPropertyNames();
+        Set<String> propertyNamesFromPropertyOne = propertyFileOne.stringPropertyNames();
+        Set<String> propertyNamesFromTwo = propertyFileTwo.stringPropertyNames();
 
-        boolean property1Empty = true;
-        boolean property2Empty = true;
+        boolean propertyOneEmpty = true;
+        boolean propertyTwoEmpty = true;
 
-        Collection<String> uniqueToProperty1 = PropertyUtils.difference(propertyNamesFrom1, propertyNamesFrom2);
-        Collection<String> uniqueToProperty2 = PropertyUtils.difference(propertyNamesFrom2, propertyNamesFrom1);
+        List<String> uniqueToPropertyFileOne = PropertyUtils.difference(propertyNamesFromPropertyOne, propertyNamesFromTwo);
+        List<String> uniqueToPropertyFileTwo = PropertyUtils.difference(propertyNamesFromTwo, propertyNamesFromPropertyOne);
 
-        if (uniqueToProperty1 != null && !uniqueToProperty1.isEmpty()) {
-            property1Empty = false;
-            output.write(Constants.ENTRIES_UNIQUE + fileName1);
-            for (String name : uniqueToProperty1) {
+        if (uniqueToPropertyFileOne != null && !uniqueToPropertyFileOne.isEmpty()) {
+            propertyOneEmpty = false;
+            output.write(Constants.ENTRIES_UNIQUE + fileNameOne);
+            for (String name : uniqueToPropertyFileOne) {
                 output.write(Constants.PREFIX + name);
             }
         }
 
-        if (uniqueToProperty2 != null && !uniqueToProperty2.isEmpty()) {
-            property2Empty = false;
-            output.write(Constants.ENTRIES_UNIQUE + fileName2);
-            for (String name : uniqueToProperty2) {
+        if (uniqueToPropertyFileTwo != null && !uniqueToPropertyFileTwo.isEmpty()) {
+            propertyTwoEmpty = false;
+            output.write(Constants.ENTRIES_UNIQUE + fileNameTwo);
+            for (String name : uniqueToPropertyFileTwo) {
                 output.write(Constants.PREFIX + name);
             }
         }
 
-        if (property1Empty && property2Empty) {
+        if (propertyOneEmpty && propertyTwoEmpty) {
             output.write(Constants.NO_DIFFERENCE);
         }
+
+        ComparisonResultBuilder builder = new ComparisonResultBuilder();
+        builder.setUniqueToPropertyOne(uniqueToPropertyFileOne).setUniqueToPropertyTwo(uniqueToPropertyFileTwo);
+        ComparisonResult comparisonResult = builder.build();
+
+        return comparisonResult;
 
     }
 

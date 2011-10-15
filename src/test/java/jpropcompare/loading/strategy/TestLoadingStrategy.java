@@ -14,9 +14,40 @@ import static org.junit.Assert.assertEquals;
  * Date: 19/09/11
  * Time: 4:00 PM
  */
-public class TestLoadingStrategy {
+public class TestLoadingStrategy implements LoadingStrategy {
 
+    @Override
+    public String getPropertyName1() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
+    @Override
+    public void setPropertyName1(String propertyName) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
+    @Override
+    public String getPropertyName2() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
+    @Override
+    public void setPropertyName2(String propertyName) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Properties getPropertyFile1() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Properties getPropertyFile2() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setArgs(String[] args) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
