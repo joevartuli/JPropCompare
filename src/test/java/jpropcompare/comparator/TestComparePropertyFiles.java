@@ -1,8 +1,16 @@
 package jpropcompare.comparator;
 
 import jpropcompare.output.ConsoleOutput;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.junit.matchers.JUnitMatchers;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -39,8 +47,11 @@ public class TestComparePropertyFiles {
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.UNIQUE_NAMES, output);
         ComparisonResult result = comparePropertyFile.execute();
 
-        System.out.print(result);
-       // assertEquals(DIFFERENCE, output.getResult());
+        List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
+        List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
+
+        assertTrue(ListComparator.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
+        assertTrue(ListComparator.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
 
         tearDown();
     }
