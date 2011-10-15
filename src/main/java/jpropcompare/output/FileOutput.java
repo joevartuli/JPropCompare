@@ -5,8 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * @author: Joe Vartuli
- * @date: 22/09/11
+ * Author: Joe Vartuli
+ * Date: 22/09/11
  */
 public class FileOutput implements Output {
 

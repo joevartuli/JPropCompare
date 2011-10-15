@@ -4,8 +4,8 @@ import java.io.PrintStream;
 
 /**
  * ConsoleOut directs all result output to System.out
- * @author: Joe Vartuli
- * @date: 19/09/11
+ * Author: Joe Vartuli
+ * Date: 19/09/11
  */
 public class ConsoleOutput implements Output {
 
@@ -22,6 +22,6 @@ public class ConsoleOutput implements Output {
 
     @Override
     public void finalise() {
-        return;
+
     }
 }

@@ -2,8 +2,8 @@ package jpropcompare;
 
 /**
  *
- * @author: Joe Vartuli
- * @date: 19/09/11
+ * Author: Joe Vartuli
+ * Date: 19/09/11
  */
 public class Constants {
 

@@ -16,8 +16,9 @@ import java.util.Set;
  * ComparePropertyFile is the main class that provides comparison
  * functionality.
  *
- * @author: Joe Vartuli
- * @date: 19/09/11
+ * Author: Joe Vartuli
+ * Date: 19/09/11
+ * @since 1.0
  */
 public class ComparePropertyFile {
 
@@ -89,7 +90,8 @@ public class ComparePropertyFile {
     }
 
     /**
-     *  Executes the specific action over the given property files
+     * Executes the specific action over the given property files
+     * @return Object representing the result of the test
      */
     public ComparisonResult execute() {
         ComparisonResult result = null;
@@ -106,6 +108,7 @@ public class ComparePropertyFile {
      *  Finds the unique property names in each file regardless of their value. Useful
      *  for determining property differences between environment properties where you would normally
      *  expect values to be different but have property names consistent
+     * @return Object representing the result of the test
      */
     private ComparisonResult uniquePropertyNames() {
 
@@ -140,10 +143,7 @@ public class ComparePropertyFile {
 
         ComparisonResultBuilder builder = new ComparisonResultBuilder();
         builder.setUniqueToPropertyOne(uniqueToPropertyFileOne).setUniqueToPropertyTwo(uniqueToPropertyFileTwo);
-        ComparisonResult comparisonResult = builder.build();
-
-        return comparisonResult;
-
+        return builder.build();
     }
 
 

@@ -1,15 +1,13 @@
 package jpropcompare.comparator;
 
-import static jpropcompare.Constants.*;
-
 import jpropcompare.output.ConsoleOutput;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
- * User: vartulij
+ * User: Joe Vartuli
  * Date: 19/09/11
- * Time: 11:15 AM
  */
 public class TestComparePropertyFiles {
 

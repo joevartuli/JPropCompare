@@ -3,9 +3,8 @@ package jpropcompare.comparator;
 import jpropcompare.output.Output;
 
 /**
- * User: vartulij
+ * User: Joe Vartuli
  * Date: 21/09/11
- * Time: 9:09 AM
  */
 public class StringBuilderOutput implements Output {
 
@@ -21,6 +20,6 @@ public class StringBuilderOutput implements Output {
 
     @Override
     public void finalise() {
-        return;
+
     }
 }

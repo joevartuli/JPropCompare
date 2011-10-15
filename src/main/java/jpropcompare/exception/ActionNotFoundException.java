@@ -1,8 +1,8 @@
 package jpropcompare.exception;
 
 /**
- * @author: Joe Vartuli
- * @date: 22/09/11
+ * Author: Joe Vartuli
+ * Date: 22/09/11
  */
 public class ActionNotFoundException extends ComparatorException {
 

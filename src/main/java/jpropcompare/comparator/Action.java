@@ -5,8 +5,9 @@ package jpropcompare.comparator;
  * Actions available
  * - UNIQUE_NAMES: command line argument "uname"
  *
- * @author: Joe Vartuli
- * @date: 19/09/11
+ * Author: Joe Vartuli
+ * Date: 19/09/11
+ * @since 1.0
  */
 public enum Action {
 

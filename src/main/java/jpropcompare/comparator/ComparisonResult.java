@@ -3,7 +3,7 @@ package jpropcompare.comparator;
 import java.util.List;
 
 /**
- * User: Joe Vartuli
+ * Author: Joe Vartuli
  * Date: 15/10/11
  */
 public class ComparisonResult {

@@ -3,9 +3,8 @@ package jpropcompare;
 import org.junit.Test;
 
 /**
- * User: vartulij
+ * User: Joe Vartuli
  * Date: 21/09/11
- * Time: 1:35 PM
  */
 public class ComparatorTest {
 

@@ -11,22 +11,22 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *  Collection of utilities to assist in comparing property files.
- * @author: Joe Vartuli
- * @date: 19/09/11
+ * Collection of utilities to assist in comparing property files.
+ * Author: Joe Vartuli
+ * Date: 19/09/11
  */
 public class PropertyUtils {
 
     /**
      * Finds all unique property names that are in the first set, but not in the second
-     * @param first - Set of property names
-     * @param second - Set of property names
+     * @param firstCollection - Set of property names
+     * @param secondCollection - Set of property names
      * @return - unique property names that are present in the first set but not in the second
      */
-    public static List difference(final Set<String> first, final Set<String> second) {
-        List difference = new ArrayList(first);
-        for (Iterator iterator = second.iterator(); iterator.hasNext();) {
-            difference.remove(iterator.next());
+    public static List<String> difference(final Set<String> firstCollection, final Set<String> secondCollection) {
+        List<String> difference = new ArrayList<String>(firstCollection);
+        for (String value : secondCollection) {
+            difference.remove(value);
         }
         return difference;
     }
