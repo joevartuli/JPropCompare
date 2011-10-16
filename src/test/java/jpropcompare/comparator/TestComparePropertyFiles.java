@@ -1,16 +1,10 @@
 package jpropcompare.comparator;
 
-import jpropcompare.output.ConsoleOutput;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.junit.matchers.JUnitMatchers;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -30,10 +24,10 @@ public class TestComparePropertyFiles {
     }
 
     @Test
-    public void testNoDifferenceFile() {
+    public void testFileWithNoDifference() {
         StringBuilderOutput output = new StringBuilderOutput();
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_1_COPY, Action.UNIQUE_NAMES, output);
-        ComparisonResult result = comparePropertyFile.execute();
+        ComparisonResult result = comparePropertyFile.runComparison();
 
         assertTrue(result.getUniqueToPropertyOne().isEmpty());
         assertTrue(result.getUniqueToPropertyTwo().isEmpty());
@@ -42,10 +36,9 @@ public class TestComparePropertyFiles {
     }
 
     @Test
-    public void testDifference() {
-        StringBuilderOutput output = new StringBuilderOutput();
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.UNIQUE_NAMES, output);
-        ComparisonResult result = comparePropertyFile.execute();
+    public void testUniqueNameWithDifferences() {
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.UNIQUE_NAMES, null);
+        ComparisonResult result = comparePropertyFile.runComparison();
 
         List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
         List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
@@ -56,42 +49,56 @@ public class TestComparePropertyFiles {
         tearDown();
     }
 
+    @Test
+    public void testValuesWithDifference() {
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.COMPARE_VALUES, null);
+        ComparisonResult result = comparePropertyFile.runComparison();
+
+        List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
+        List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
+
+        assertTrue(ListComparator.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
+        assertTrue(ListComparator.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
+
+        System.out.println(result);
+
+        tearDown();
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testProperty1IsNull() {
-        comparePropertyFile = new ComparePropertyFile(null, PROPERTY_1_COPY, Action.UNIQUE_NAMES, new ConsoleOutput());
+        comparePropertyFile = new ComparePropertyFile(null, PROPERTY_1_COPY, Action.UNIQUE_NAMES, null);
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty1IsEmpty() {
-        comparePropertyFile = new ComparePropertyFile("  ", PROPERTY_1_COPY, Action.UNIQUE_NAMES, new ConsoleOutput());
+        comparePropertyFile = new ComparePropertyFile("  ", PROPERTY_1_COPY, Action.UNIQUE_NAMES, null);
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty2IsNull() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, null, Action.UNIQUE_NAMES, new ConsoleOutput());
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, null, Action.UNIQUE_NAMES, null);
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty2IsEmpty() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, "       ", Action.UNIQUE_NAMES, new ConsoleOutput());
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, "       ", Action.UNIQUE_NAMES, null);
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty1NotFound() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1 + "non", PROPERTY_2, Action.UNIQUE_NAMES, new ConsoleOutput());
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1 + "non", PROPERTY_2, Action.UNIQUE_NAMES, null);
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty2NotFound() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2 + "non", Action.UNIQUE_NAMES, new ConsoleOutput());
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2 + "non", Action.UNIQUE_NAMES, null);
         tearDown();
     }
-
-
 
 }

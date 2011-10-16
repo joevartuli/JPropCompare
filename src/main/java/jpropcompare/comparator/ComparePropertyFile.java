@@ -7,10 +7,7 @@ import jpropcompare.utilities.PropertyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * ComparePropertyFile is the main class that provides comparison
@@ -66,7 +63,6 @@ public class ComparePropertyFile {
         this.fileNameOne = fileNameOne;
         this.fileNameTwo = fileNameTwo;
 
-
         try {
             InputStream inputStream1 = this.getClass().getClassLoader().getResourceAsStream(fileNameOne);
             propertyFileOne = new Properties();
@@ -93,33 +89,40 @@ public class ComparePropertyFile {
      * Executes the specific action over the given property files
      * @return Object representing the result of the test
      */
-    public ComparisonResult execute() {
-        ComparisonResult result = null;
-        switch (action) {
-            case UNIQUE_NAMES:
-                result = uniquePropertyNames();
-                break;
-        }
-        output.finalise();
-        return result;
+    public ComparisonResult runComparison() {
+       return comparePropertyFiles(false);
     }
 
     /**
-     *  Finds the unique property names in each file regardless of their value. Useful
-     *  for determining property differences between environment properties where you would normally
-     *  expect values to be different but have property names consistent
-     * @return Object representing the result of the test
+     * Executes the specific action over the given property files
      */
-    private ComparisonResult uniquePropertyNames() {
+    public void runVerboseComparison() {
+        comparePropertyFiles(true);
+    }
 
-        Set<String> propertyNamesFromPropertyOne = propertyFileOne.stringPropertyNames();
-        Set<String> propertyNamesFromTwo = propertyFileTwo.stringPropertyNames();
+    private ComparisonResult comparePropertyFiles(boolean verbose) {
+        ComparisonResult result = null;
+        switch (action) {
+            case UNIQUE_NAMES:
+                result = findUniquePropertyNames();
+                break;
+            case COMPARE_VALUES:
+                result = comparePropertyValues();
+                break;
+        }
 
+        if (verbose) {
+            output(result);
+        }
+        return result;
+    }
+
+    private void output(ComparisonResult result) {
         boolean propertyOneEmpty = true;
         boolean propertyTwoEmpty = true;
 
-        List<String> uniqueToPropertyFileOne = PropertyUtils.difference(propertyNamesFromPropertyOne, propertyNamesFromTwo);
-        List<String> uniqueToPropertyFileTwo = PropertyUtils.difference(propertyNamesFromTwo, propertyNamesFromPropertyOne);
+        List<String> uniqueToPropertyFileOne = result.getUniqueToPropertyOne();
+        List<String> uniqueToPropertyFileTwo = result.getUniqueToPropertyTwo();
 
         if (uniqueToPropertyFileOne != null && !uniqueToPropertyFileOne.isEmpty()) {
             propertyOneEmpty = false;
@@ -141,8 +144,37 @@ public class ComparePropertyFile {
             output.write(Constants.NO_DIFFERENCE);
         }
 
+        output.finalise();
+    }
+
+    /**
+     *  Finds the unique property names in each file regardless of their value. Useful
+     *  for determining property differences between environment properties where you would normally
+     *  expect values to be different but have property names consistent
+     * @return Object representing the result of the test
+     */
+    private ComparisonResult findUniquePropertyNames() {
+
+        Set<String> propertyNamesFromPropertyOne = propertyFileOne.stringPropertyNames();
+        Set<String> propertyNamesFromTwo = propertyFileTwo.stringPropertyNames();
+
+        List<String> uniqueToPropertyFileOne = PropertyUtils.difference(propertyNamesFromPropertyOne, propertyNamesFromTwo);
+        List<String> uniqueToPropertyFileTwo = PropertyUtils.difference(propertyNamesFromTwo, propertyNamesFromPropertyOne);
+
         ComparisonResultBuilder builder = new ComparisonResultBuilder();
         builder.setUniqueToPropertyOne(uniqueToPropertyFileOne).setUniqueToPropertyTwo(uniqueToPropertyFileTwo);
+        return builder.build();
+    }
+
+
+    private ComparisonResult comparePropertyValues() {
+
+        ComparisonResult result = findUniquePropertyNames();
+
+        Map<String, AbstractMap.SimpleEntry<String, String>> differences = PropertyUtils.propertyValueDifferences(propertyFileOne, propertyFileTwo);
+
+        ComparisonResultBuilder builder = new ComparisonResultBuilder(result);
+        builder.setPropertyValueDifferences(differences);
         return builder.build();
     }
 

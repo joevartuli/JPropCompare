@@ -1,6 +1,9 @@
 package jpropcompare.comparator;
 
+import static java.util.AbstractMap.*;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Joe Vartuli
@@ -10,10 +13,12 @@ public class ComparisonResult {
 
     private List<String> uniqueToPropertyOne;
     private List<String> uniqueToPropertyTwo;
+    private Map<String, SimpleEntry<String, String>> propertyValueDifferences;
 
-    public ComparisonResult(List<String> uniqueToPropertyOne, List<String> uniqueToPropertyTwo) {
+    public ComparisonResult(List<String> uniqueToPropertyOne, List<String> uniqueToPropertyTwo, Map<String, SimpleEntry<String, String>> propertyValueDifferences) {
         this.uniqueToPropertyOne = uniqueToPropertyOne;
         this.uniqueToPropertyTwo = uniqueToPropertyTwo;
+        this.propertyValueDifferences = propertyValueDifferences;
     }
 
     public List<String> getUniqueToPropertyOne() {
@@ -24,11 +29,16 @@ public class ComparisonResult {
         return uniqueToPropertyTwo;
     }
 
+    public Map<String, SimpleEntry<String, String>> getPropertyValueDifferences() {
+        return propertyValueDifferences;
+    }
+
     @Override
     public String toString() {
-        return "ComparisonResult{" +
+        return "ComparisonResult{ " +
                 "uniqueToPropertyOne=" + uniqueToPropertyOne +
                 ", uniqueToPropertyTwo=" + uniqueToPropertyTwo +
-                '}';
+                ", propertyValueDifferences=" + propertyValueDifferences +
+                " }";
     }
 }

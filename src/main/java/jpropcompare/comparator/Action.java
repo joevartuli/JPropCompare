@@ -4,6 +4,7 @@ package jpropcompare.comparator;
  * Defines the difference actions available to compare property files.
  * Actions available
  * - UNIQUE_NAMES: command line argument "uname"
+ * - COMPARE_VALUES: command line argument "cvalue"
  *
  * Author: Joe Vartuli
  * Date: 19/09/11
@@ -11,7 +12,8 @@ package jpropcompare.comparator;
  */
 public enum Action {
 
-    UNIQUE_NAMES("uname");
+    UNIQUE_NAMES("uname"),
+    COMPARE_VALUES("cvalue");
 
     private String action;
 

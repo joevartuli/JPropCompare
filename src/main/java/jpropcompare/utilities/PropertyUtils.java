@@ -5,10 +5,10 @@
  */
 package jpropcompare.utilities;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
+
+import static java.util.AbstractMap.*;
 
 /**
  * Collection of utilities to assist in comparing property files.
@@ -29,6 +29,21 @@ public class PropertyUtils {
             difference.remove(value);
         }
         return difference;
+    }
+
+
+    public static Map<String, SimpleEntry<String, String>> propertyValueDifferences(Properties propertyFileOne, Properties propertyFileTwo) {
+        Map<String, SimpleEntry<String, String>>  differences = new HashMap<String, SimpleEntry<String, String>>();
+
+        for (String key : propertyFileOne.stringPropertyNames()) {
+            String propertyOneValue = propertyFileOne.getProperty(key);
+            String propertyTwoValue = propertyFileTwo.getProperty(key);
+            if (propertyTwoValue != null && !propertyOneValue.equals(propertyTwoValue)) {
+                differences.put(key, new SimpleEntry(propertyOneValue, propertyTwoValue));
+            }
+        }
+
+        return differences;
     }
 
 

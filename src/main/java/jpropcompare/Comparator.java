@@ -100,7 +100,7 @@ public class Comparator {
                     comparePropertyFile = new ComparePropertyFile(propertyName1, propertyName2, action, output);
                 }
 
-                comparePropertyFile.execute();
+                comparePropertyFile.runVerboseComparison();
             } catch (ComparatorException e) {
                 out.println(e.getMessage());
                 printHelpMessage();
