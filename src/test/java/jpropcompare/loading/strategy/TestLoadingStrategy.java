@@ -9,31 +9,31 @@ import java.util.Properties;
 public class TestLoadingStrategy implements LoadingStrategy {
 
     @Override
-    public String getPropertyName1() {
+    public String getPropertyNameOne() {
         return null;
     }
 
     @Override
-    public void setPropertyName1(String propertyName) {
+    public void setPropertyNameOne(String propertyName) {
     }
 
 
     @Override
-    public String getPropertyName2() {
+    public String getPropertyNameTwo() {
         return null;
     }
 
     @Override
-    public void setPropertyName2(String propertyName) {
+    public void setPropertyNameTwo(String propertyName) {
     }
 
     @Override
-    public Properties getPropertyFile1() {
+    public Properties getPropertyFileOne() {
         return null;
     }
 
     @Override
-    public Properties getPropertyFile2() {
+    public Properties getPropertyFileTwo() {
         return null;
     }
 

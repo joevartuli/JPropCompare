@@ -8,7 +8,7 @@ import java.io.IOException;
  * Author: Joe Vartuli
  * Date: 22/09/11
  */
-public class FileOutput implements Output {
+public class FileOutput extends StandardOutputFormatter {
 
     private StringBuilder stringBuilder;
     private String filename;

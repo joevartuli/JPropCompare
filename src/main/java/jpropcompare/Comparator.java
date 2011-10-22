@@ -116,8 +116,8 @@ public class Comparator {
             if (loadedClass.isAssignableFrom(LoadingStrategy.class)) {
                 try {
                     loadingStrategy = (LoadingStrategy) loadedClass.newInstance();
-                    loadingStrategy.setPropertyName1(propertyName1);
-                    loadingStrategy.setPropertyName2(propertyName2);
+                    loadingStrategy.setPropertyNameOne(propertyName1);
+                    loadingStrategy.setPropertyNameTwo(propertyName2);
                     loadingStrategy.setArgs(args);
                 } catch (InstantiationException e) {
                     throw new LoadingStrategyException(Constants.CLASS_NOT_CREATED.replace(Constants.CLASS_SUBSTITUTE, loadingStrategyClassName), e);

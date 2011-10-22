@@ -7,7 +7,7 @@ import java.io.PrintStream;
  * Author: Joe Vartuli
  * Date: 19/09/11
  */
-public class ConsoleOutput implements Output {
+public class ConsoleOutput extends StandardOutputFormatter {
 
     private PrintStream out = System.out;
 

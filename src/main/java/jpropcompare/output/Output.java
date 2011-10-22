@@ -1,9 +1,11 @@
 package jpropcompare.output;
 
+import jpropcompare.comparator.ComparisonResult;
+
 /**
  * Interface allowing multiple output points
- * @author: Joe Vartuli
- * @date: 19/09/11
+ * Author: Joe Vartuli
+ * Date: 19/09/11
  */
 public interface Output {
 
@@ -12,6 +14,8 @@ public interface Output {
      * @param data - resulting data
      */
     public void write(String data);
+
+    public void outputResult(ComparisonResult result);
 
     public void finalise();
 

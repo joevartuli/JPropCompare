@@ -15,11 +15,14 @@ public class ComparisonResultBuilder {
     private List<String> uniqueToPropertyTwo;
     private Map<String, SimpleEntry<String, String>> propertyValueDifferences;
 
+    private String fileNameOne;
+    private String fileNameTwo;
+
     public ComparisonResultBuilder() {
 
     }
 
-    public ComparisonResultBuilder(ComparisonResult result) {
+    public void override(ComparisonResult result) {
         this.uniqueToPropertyOne = result.getUniqueToPropertyOne();
         this.uniqueToPropertyTwo = result.getUniqueToPropertyTwo();
         this.propertyValueDifferences = result.getPropertyValueDifferences();
@@ -43,6 +46,16 @@ public class ComparisonResultBuilder {
 
     public ComparisonResultBuilder setPropertyValueDifferences(Map<String, SimpleEntry<String, String>> propertyValueDifferences) {
         this.propertyValueDifferences = propertyValueDifferences;
+        return this;
+    }
+
+    public ComparisonResultBuilder setFileNameOne(String fileNameOne) {
+        this.fileNameOne = fileNameOne;
+        return this;
+    }
+
+    public ComparisonResultBuilder setFileNameTwo(String fileNameTwo) {
+        this.fileNameTwo = fileNameTwo;
         return this;
     }
 }
