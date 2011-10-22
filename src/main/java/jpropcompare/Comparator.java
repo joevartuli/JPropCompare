@@ -67,10 +67,8 @@ public class Comparator {
                 }
                 nextArgument = null;
             } else {
-                Arguments argument = Arguments.getArgument(arg);
-                if (argument != null) {
-                    nextArgument = argument;
-                } else {
+                nextArgument = Arguments.getArgument(arg);
+                if (nextArgument == null) {
                     out.println(Constants.NOT_VALID_ARG + arg);
                     printHelpMessage();
                 }
@@ -149,6 +147,7 @@ public class Comparator {
         out.println("       If this is used the values of p1 and p2 are injected into the class");
         out.println("        as a way for you to load different property structures in different ways.");
         out.println("  -a: action to perform");
+        System.exit(1);
     }
 
     private boolean isArgumentValid() {
