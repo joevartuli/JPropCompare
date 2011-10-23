@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * ComparisonResult encapsulates the result of the
+ * comparison test into a single object
  * Author: Joe Vartuli
  * Date: 15/10/11
  */

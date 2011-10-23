@@ -46,6 +46,20 @@ public class PropertyUtils {
         return differences;
     }
 
+    public static boolean isConceptuallyEqual(List<String> listOne, List<String> listTwo) {
+        boolean equal = false;
+
+        if (listOne.size() == listTwo.size()) {
+            equal = listTwo.containsAll(listOne);
+        }
+
+        return equal;
+    }
+
+    public static boolean isConceptuallyEqual(Map<String, SimpleEntry<String, String>> mapOne, Map<String, SimpleEntry<String, String>> mapTwo) {
+       return mapOne.equals(mapTwo);
+    }
+
 
 
 }

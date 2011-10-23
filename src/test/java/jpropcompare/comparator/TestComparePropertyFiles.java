@@ -1,10 +1,11 @@
 package jpropcompare.comparator;
 
 import jpropcompare.output.ConsoleOutput;
+import jpropcompare.utilities.PropertyUtils;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import static java.util.AbstractMap.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -26,8 +27,7 @@ public class TestComparePropertyFiles {
 
     @Test
     public void testFileWithNoDifference() {
-        StringBuilderOutput output = new StringBuilderOutput();
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_1_COPY, Action.UNIQUE_NAMES, output);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_1_COPY, Action.UNIQUE_NAMES, null);
         ComparisonResult result = comparePropertyFile.runComparison();
 
         assertTrue(result.getUniqueToPropertyOne().isEmpty());
@@ -44,8 +44,8 @@ public class TestComparePropertyFiles {
         List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
         List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
 
-        assertTrue(ListComparator.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
-        assertTrue(ListComparator.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
+        assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
+        assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
 
         tearDown();
     }
@@ -53,16 +53,19 @@ public class TestComparePropertyFiles {
     @Test
     public void testValuesWithDifference() {
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.COMPARE_VALUES, new ConsoleOutput());
-        //ComparisonResult result = comparePropertyFile.runComparison();
-        comparePropertyFile.runVerboseComparison();
+        ComparisonResult result = comparePropertyFile.runComparison();
 
-       // List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
-        //List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
+        List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
+        List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
 
-        //assertTrue(ListComparator.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
-        //(ListComparator.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
+        Map<String, SimpleEntry<String, String>> expectedDifferences = new HashMap<String, SimpleEntry<String, String>>();
+        expectedDifferences.put("common.1.diffValue", new SimpleEntry<String, String>("file1", "file2"));
+        expectedDifferences.put("common.2.diffValue", new SimpleEntry<String, String>("file1", "file2"));
 
-        //System.out.println(result);
+        assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
+        assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
+
+        assertTrue(PropertyUtils.isConceptuallyEqual(expectedDifferences, result.getPropertyValueDifferences()));
 
         tearDown();
     }

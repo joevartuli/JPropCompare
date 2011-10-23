@@ -1,11 +1,12 @@
 package jpropcompare.comparator;
 
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.AbstractMap.*;
+
+import static java.util.AbstractMap.SimpleEntry;
 
 /**
+ * Builder class used to construct the comparison result
  * Author: Joe Vartuli
  * Date: 15/10/11
  */
@@ -17,16 +18,6 @@ public class ComparisonResultBuilder {
 
     private String fileNameOne;
     private String fileNameTwo;
-
-    public ComparisonResultBuilder() {
-
-    }
-
-    public void override(ComparisonResult result) {
-        this.uniqueToPropertyOne = result.getUniqueToPropertyOne();
-        this.uniqueToPropertyTwo = result.getUniqueToPropertyTwo();
-        this.propertyValueDifferences = result.getPropertyValueDifferences();
-    }
 
 
     public ComparisonResult build() {

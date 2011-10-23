@@ -14,11 +14,5 @@ public class ComparatorTest {
         comparator = null;
     }
 
-    @Test
-    public void testRunWithFile() {
-        String[] args = {"-p1","property1.properties", "-p2","property2.properties", "-f", "C:\\test\\test.txt"};
-        comparator = new Comparator();
-        comparator.run(args);
-        tearDown();
-    }
+
 }

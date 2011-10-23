@@ -1,5 +1,7 @@
 package jpropcompare.output;
 
+import jpropcompare.Constants;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class FileOutput extends StandardOutputFormatter {
     @Override
     public void write(String data) {
         stringBuilder.append(data);
-        stringBuilder.append(System.getProperty("line.separator"));
+        stringBuilder.append(Constants.NEW_LINE);
     }
 
 

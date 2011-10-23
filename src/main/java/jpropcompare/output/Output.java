@@ -10,13 +10,9 @@ import jpropcompare.comparator.ComparisonResult;
 public interface Output {
 
     /**
-     * Result data given to the Output for processing
-     * @param data - resulting data
+     * Outputs the result of the comparison test in a given format
+     * @param result - result to output
      */
-    public void write(String data);
-
     public void outputResult(ComparisonResult result);
-
-    public void finalise();
 
 }

@@ -91,7 +91,7 @@ public class ComparePropertyFile {
 
     /**
      * Executes the specific action over the given property files
-     * @return Object representing the result of the test
+     * @return Object representing the result of the comparison
      */
     public ComparisonResult runComparison() {
         return comparePropertyFiles(false);
@@ -99,11 +99,17 @@ public class ComparePropertyFile {
 
     /**
      * Executes the specific action over the given property files
+     * using an output to display the results
      */
     public void runVerboseComparison() {
         comparePropertyFiles(true);
     }
 
+    /**
+     * Runs the actions on the property files
+     * @param verbose - determines whether or not the result should be outputted
+     * @return result of the comparison
+     */
     private ComparisonResult comparePropertyFiles(boolean verbose) {
         ComparisonResult result;
 
@@ -131,17 +137,19 @@ public class ComparePropertyFile {
      */
     private void findUniquePropertyNames() {
 
-        Set<String> propertyNamesFromPropertyOne = propertyFileOne.stringPropertyNames();
+        Set<String> propertyNamesFromOne = propertyFileOne.stringPropertyNames();
         Set<String> propertyNamesFromTwo = propertyFileTwo.stringPropertyNames();
 
-        List<String> uniqueToPropertyFileOne = PropertyUtils.difference(propertyNamesFromPropertyOne, propertyNamesFromTwo);
-        List<String> uniqueToPropertyFileTwo = PropertyUtils.difference(propertyNamesFromTwo, propertyNamesFromPropertyOne);
+        List<String> uniqueToPropertyFileOne = PropertyUtils.difference(propertyNamesFromOne, propertyNamesFromTwo);
+        List<String> uniqueToPropertyFileTwo = PropertyUtils.difference(propertyNamesFromTwo, propertyNamesFromOne);
 
         comparisonResultBuilder.setUniqueToPropertyOne(uniqueToPropertyFileOne).setUniqueToPropertyTwo(uniqueToPropertyFileTwo);
     }
 
     /**
-     *
+     * In addition to finding unique property names in each file, compare property values
+     * will also render the property names where the values are different from the first
+     * and second property file.
      */
     private void comparePropertyValues() {
 

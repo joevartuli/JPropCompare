@@ -13,6 +13,18 @@ import java.util.Map;
  */
 public abstract class StandardOutputFormatter implements Output {
 
+    /**
+     * Output string given to process
+     * @param output - String to output
+     */
+    public abstract void write(String output);
+
+    /**
+     * Method that allows the instantiation or destruction of
+     * any required or open resources
+     */
+    public abstract void finalise();
+
     public final void outputResult(ComparisonResult result) {
 
         boolean propertyOneEmpty = true;
@@ -25,7 +37,7 @@ public abstract class StandardOutputFormatter implements Output {
 
         if (uniqueToPropertyFileOne != null && !uniqueToPropertyFileOne.isEmpty()) {
             propertyOneEmpty = false;
-            write(Constants.ENTRIES_UNIQUE + "one");
+            write(Constants.ENTRIES_UNIQUE + " property one:");
             for (String name : uniqueToPropertyFileOne) {
                 write(Constants.PREFIX + name);
             }
@@ -33,7 +45,7 @@ public abstract class StandardOutputFormatter implements Output {
 
         if (uniqueToPropertyFileTwo != null && !uniqueToPropertyFileTwo.isEmpty()) {
             propertyTwoEmpty = false;
-            write(Constants.ENTRIES_UNIQUE + "two");
+            write(Constants.ENTRIES_UNIQUE + " property two:");
             for (String name : uniqueToPropertyFileTwo) {
                 write(Constants.PREFIX + name);
             }
@@ -44,7 +56,7 @@ public abstract class StandardOutputFormatter implements Output {
             write(Constants.DIFFERENCE);
             for (String key : propertyValueDifferences.keySet()) {
                 SimpleEntry<String, String> value = propertyValueDifferences.get(key);
-                write(key + " - " + "one" + ": " + value.getKey() + " <> " + "two" + ": " + value.getValue());
+                write(key + " - one: " + value.getKey() + " <> two: " + value.getValue());
             }
         }
 
