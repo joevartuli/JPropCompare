@@ -28,7 +28,7 @@ public class CompareProperties {
      *
      * @return Object representing the result of the comparison
      */
-    public ComparisonResult runComparison() {
+     ComparisonResult runComparison() {
         ComparisonResult result;
 
         switch (action) {
