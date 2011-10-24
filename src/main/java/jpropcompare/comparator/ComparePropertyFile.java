@@ -24,7 +24,6 @@ public class ComparePropertyFile {
     private Properties propertyFileTwo;
     private Action action;
     private Output output;
-    private ComparisonResultBuilder comparisonResultBuilder;
 
     /**
      * Initialises this class with a loading strategy, action to perform and an output class
@@ -34,8 +33,6 @@ public class ComparePropertyFile {
      */
     public ComparePropertyFile(LoadingStrategy strategy, Action action, Output output) {
         this(strategy.getPropertyFileOne(), strategy.getPropertyFileTwo(), action, output);
-        comparisonResultBuilder.setFileNameOne(strategy.getPropertyNameOne());
-        comparisonResultBuilder.setFileNameTwo(strategy.getPropertyNameTwo());
     }
 
     /**
@@ -56,37 +53,59 @@ public class ComparePropertyFile {
             throw new IllegalArgumentException("fileNameTwo can not be null or empty");
         }
 
-        comparisonResultBuilder.setFileNameOne(fileNameOne);
-        comparisonResultBuilder.setFileNameTwo(fileNameTwo);
+        InputStream inputStreamOne = null;
+        InputStream inputStreamTwo = null;
 
         try {
-            InputStream inputStream1 = this.getClass().getClassLoader().getResourceAsStream(fileNameOne);
+            inputStreamOne = this.getClass().getClassLoader().getResourceAsStream(fileNameOne);
             propertyFileOne = new Properties();
-            propertyFileOne.load(inputStream1);
+            propertyFileOne.load(inputStreamOne);
         } catch (NullPointerException e) {
             throw new NullPointerException("Could not find property file with name " + fileNameOne);
         } catch (IOException e) {
             throw new IllegalArgumentException("An exception occurred when loading property file with name " + fileNameOne, e);
+        } finally {
+            if (inputStreamOne != null) {
+                try {
+                    inputStreamOne.close();
+                } catch (IOException e) {
+                    //
+                }
+            }
         }
 
         try {
-            InputStream inputStream2 = this.getClass().getClassLoader().getResourceAsStream(fileNameTwo);
+            inputStreamTwo = this.getClass().getClassLoader().getResourceAsStream(fileNameTwo);
             propertyFileTwo = new Properties();
-            propertyFileTwo.load(inputStream2);
+            propertyFileTwo.load(inputStreamTwo);
         } catch (NullPointerException e) {
             throw new NullPointerException("Could not find property file with name " + fileNameOne);
         }  catch (IOException e) {
             throw new IllegalArgumentException("An exception occurred when loading file with name " + fileNameTwo, e);
+        } finally {
+            if (inputStreamTwo != null) {
+                try {
+                    inputStreamTwo.close();
+                } catch (IOException e) {
+                    //
+                }
+            }
         }
 
     }
 
-    private ComparePropertyFile(Properties propertiesOne, Properties propertiesTwo, Action action, Output output) {
+    /**
+     *
+     * @param propertiesOne
+     * @param propertiesTwo
+     * @param action
+     * @param output
+     */
+    public ComparePropertyFile(Properties propertiesOne, Properties propertiesTwo, Action action, Output output) {
         this.action = action;
         this.output = output;
         this.propertyFileOne = propertiesOne;
         this.propertyFileTwo = propertiesTwo;
-        this.comparisonResultBuilder = new ComparisonResultBuilder();
     }
 
     /**
@@ -111,54 +130,14 @@ public class ComparePropertyFile {
      * @return result of the comparison
      */
     private ComparisonResult comparePropertyFiles(boolean verbose) {
-        ComparisonResult result;
+        CompareProperties compareProperties = new CompareProperties(propertyFileOne, propertyFileTwo, action);
 
-        switch (action) {
-            case UNIQUE_NAMES:
-                findUniquePropertyNames();
-                break;
-            case COMPARE_VALUES:
-                comparePropertyValues();
-                break;
-        }
-
-        result = comparisonResultBuilder.build();
+        ComparisonResult comparisonResult = compareProperties.runComparison();
 
         if (verbose) {
-            output.outputResult(result);
+            output.outputResult(comparisonResult);
         }
-        return result;
+        return comparisonResult;
     }
-
-    /**
-     *  Finds the unique property names in each file regardless of their value. Useful
-     *  for determining property differences between environment properties where you would normally
-     *  expect values to be different but have property names consistent
-     */
-    private void findUniquePropertyNames() {
-
-        Set<String> propertyNamesFromOne = propertyFileOne.stringPropertyNames();
-        Set<String> propertyNamesFromTwo = propertyFileTwo.stringPropertyNames();
-
-        List<String> uniqueToPropertyFileOne = PropertyUtils.difference(propertyNamesFromOne, propertyNamesFromTwo);
-        List<String> uniqueToPropertyFileTwo = PropertyUtils.difference(propertyNamesFromTwo, propertyNamesFromOne);
-
-        comparisonResultBuilder.setUniqueToPropertyOne(uniqueToPropertyFileOne).setUniqueToPropertyTwo(uniqueToPropertyFileTwo);
-    }
-
-    /**
-     * In addition to finding unique property names in each file, compare property values
-     * will also render the property names where the values are different from the first
-     * and second property file.
-     */
-    private void comparePropertyValues() {
-
-        findUniquePropertyNames();
-
-        Map<String, SimpleEntry<String, String>> differences = PropertyUtils.propertyValueDifferences(propertyFileOne, propertyFileTwo);
-
-        comparisonResultBuilder.setPropertyValueDifferences(differences);
-    }
-
 
 }

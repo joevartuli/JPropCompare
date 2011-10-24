@@ -87,7 +87,7 @@ public class Comparator {
 
                 Output output;
                 if (outputFilename != null) {
-                    output = getFileOutput();
+                   output = new FileOutput(outputFilename);
                 } else {
                    output = new ConsoleOutput();
                 }
@@ -128,10 +128,6 @@ public class Comparator {
         }
     }
 
-    private Output getFileOutput() {
-        return new FileOutput(this.outputFilename);
-    }
-
     private void determineActionToPerform() throws ActionNotFoundException {
         this.action = Action.getAction(actionName);
         if (this.action == null) {
@@ -145,7 +141,7 @@ public class Comparator {
         out.println("  -p2: file of the property name to compare");
         out.println("  -ls: custom loading strategy used to load properties in a complex way.");
         out.println("       If this is used the values of p1 and p2 are injected into the class");
-        out.println("        as a way for you to load different property structures in different ways.");
+        out.println("       as a way for you to load different property structures in different ways.");
         out.println("  -a: action to perform");
         System.exit(1);
     }

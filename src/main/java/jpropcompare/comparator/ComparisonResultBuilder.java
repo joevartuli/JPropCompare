@@ -16,10 +16,6 @@ public class ComparisonResultBuilder {
     private List<String> uniqueToPropertyTwo;
     private Map<String, SimpleEntry<String, String>> propertyValueDifferences;
 
-    private String fileNameOne;
-    private String fileNameTwo;
-
-
     public ComparisonResult build() {
         return new ComparisonResult(uniqueToPropertyOne, uniqueToPropertyTwo, propertyValueDifferences);
     }
@@ -40,13 +36,4 @@ public class ComparisonResultBuilder {
         return this;
     }
 
-    public ComparisonResultBuilder setFileNameOne(String fileNameOne) {
-        this.fileNameOne = fileNameOne;
-        return this;
-    }
-
-    public ComparisonResultBuilder setFileNameTwo(String fileNameTwo) {
-        this.fileNameTwo = fileNameTwo;
-        return this;
-    }
 }
