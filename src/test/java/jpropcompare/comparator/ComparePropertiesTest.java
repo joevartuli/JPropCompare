@@ -72,8 +72,8 @@ public class ComparePropertiesTest {
         List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
 
         Map<String, SimpleEntry<String, String>> expectedDifferences = new HashMap<String, SimpleEntry<String, String>>();
-        expectedDifferences.put("common.1.diffValue", new AbstractMap.SimpleEntry<String, String>("file1", "file2"));
-        expectedDifferences.put("common.2.diffValue", new AbstractMap.SimpleEntry<String, String>("file1", "file2"));
+        expectedDifferences.put("common.1.diffValue", new SimpleEntry<String, String>("file1", "file2"));
+        expectedDifferences.put("common.2.diffValue", new SimpleEntry<String, String>("file1", "file2"));
 
         assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
         assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
