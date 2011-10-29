@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  * User: Joe Vartuli
  * Date: 15/10/11
  */
-public class TestPropertyUtils {
+public class PropertyUtilsTest {
 
     @Test
     public void testCombinationOfConceptuallyEqualArrays() {

@@ -10,7 +10,7 @@ import org.junit.Test;
  * User: Joe Vartuli
  * Date: 19/09/11
  */
-public class TestComparePropertyFiles {
+public class ComparePropertyFilesTest {
 
     private ComparePropertyFile comparePropertyFile;
 

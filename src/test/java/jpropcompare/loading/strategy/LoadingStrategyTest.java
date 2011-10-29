@@ -6,7 +6,7 @@ import java.util.Properties;
  * User: Joe Vartuli
  * Date: 19/09/11
  */
-public class TestLoadingStrategy implements LoadingStrategy {
+public class LoadingStrategyTest implements LoadingStrategy {
 
     @Override
     public String getPropertyNameOne() {
