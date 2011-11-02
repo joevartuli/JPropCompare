@@ -79,7 +79,7 @@ public class ComparePropertyFile {
             propertyFileTwo = new Properties();
             propertyFileTwo.load(inputStreamTwo);
         } catch (NullPointerException e) {
-            throw new NullPointerException("Could not find property file with name " + fileNameOne);
+            throw new NullPointerException("Could not find property file with name " + fileNameTwo);
         }  catch (IOException e) {
             throw new IllegalArgumentException("An exception occurred when loading file with name " + fileNameTwo, e);
         } finally {
