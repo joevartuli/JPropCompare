@@ -30,10 +30,6 @@ public class Comparator {
 
     private ComparePropertyFile comparePropertyFile;
 
-    public Comparator() {
-        this(null);
-    }
-
     public Comparator(PrintStream out) {
         action = Action.getDefaultAction();
         this.out = out;
@@ -46,31 +42,33 @@ public class Comparator {
         this.args = args;
 
         Arguments nextArgument = null;
-        for (String arg : args) {
-            if (nextArgument != null) {
-                switch (nextArgument) {
-                    case PROPERTY_1:
-                        propertyName1 = arg;
-                        break;
-                    case PROPERTY_2:
-                        propertyName2 = arg;
-                        break;
-                    case LOADING_STRATEGY:
-                        loadingStrategyClassName = arg;
-                        break;
-                    case ACTION:
-                        actionName = arg;
-                        break;
-                    case FILE_OUTPUT:
-                        outputFilename = arg;
-                        break;
-                }
-                nextArgument = null;
-            } else {
-                nextArgument = Arguments.getArgument(arg);
-                if (nextArgument == null) {
-                    out.println(Constants.NOT_VALID_ARG + arg);
-                    printHelpMessage();
+        if (args != null) {
+            for (String arg : args) {
+                if (nextArgument != null) {
+                    switch (nextArgument) {
+                        case PROPERTY_1:
+                            propertyName1 = arg;
+                            break;
+                        case PROPERTY_2:
+                            propertyName2 = arg;
+                            break;
+                        case LOADING_STRATEGY:
+                            loadingStrategyClassName = arg;
+                            break;
+                        case ACTION:
+                            actionName = arg;
+                            break;
+                        case FILE_OUTPUT:
+                            outputFilename = arg;
+                            break;
+                    }
+                    nextArgument = null;
+                } else {
+                    nextArgument = Arguments.getArgument(arg);
+                    if (nextArgument == null) {
+                        out.println(Constants.NOT_VALID_ARG + arg);
+                        printHelpMessage();
+                    }
                 }
             }
         }
@@ -136,14 +134,14 @@ public class Comparator {
     }
 
     private void printHelpMessage() {
-        out.println("Usage: java - jar <JAR_FILE> -p1 <FILE_NAME> -p2 <FILE_NAME> [-ls <LOADING_STRATEGY>] [-a <ACTION>]");
-        out.println("  -p1: file of the property name to compare");
-        out.println("  -p2: file of the property name to compare");
-        out.println("  -ls: custom loading strategy used to load properties in a complex way.");
-        out.println("       If this is used the values of p1 and p2 are injected into the class");
-        out.println("       as a way for you to load different property structures in different ways.");
-        out.println("  -a: action to perform");
-        System.exit(1);
+        StringBuilder stringBuilder = new StringBuilder("Usage: java - jar <JAR_FILE> -p1 <FILE_NAME> -p2 <FILE_NAME> [-ls <LOADING_STRATEGY>] [-a <ACTION>]" + Constants.NEW_LINE);
+        stringBuilder.append("  -p1: file of the property name to compare" + Constants.NEW_LINE);
+        stringBuilder.append("  -p2: file of the property name to compare" + Constants.NEW_LINE);
+        stringBuilder.append("  -ls: custom loading strategy used to load properties in a complex way." + Constants.NEW_LINE);
+        stringBuilder.append("       If this is used the values of p1 and p2 are injected into the class" + Constants.NEW_LINE);
+        stringBuilder.append("       as a way for you to load different property structures in different ways." + Constants.NEW_LINE);
+        stringBuilder.append("  -a: action to perform");
+        out.println(stringBuilder.toString());
     }
 
     private boolean isArgumentValid() {
@@ -180,7 +178,7 @@ public class Comparator {
 
 
     public static void main(String... args) {
-        Comparator comparator = new Comparator();
+        Comparator comparator = new Comparator(null);
         comparator.run(args);
     }
 

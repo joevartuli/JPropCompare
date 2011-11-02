@@ -1,10 +1,9 @@
 package jpropcompare.comparator;
 
-import jpropcompare.output.ConsoleOutput;
-import jpropcompare.utilities.PropertyUtils;
+import jpropcompare.loading.strategy.LoadingStrategyMock;
+import jpropcompare.output.StringOutput;
 import org.junit.Test;
-
-
+import static org.junit.Assert.*;
 
 /**
  * User: Joe Vartuli
@@ -22,39 +21,63 @@ public class ComparePropertyFilesTest {
         comparePropertyFile = null;
     }
 
+    @Test
+    public void testRun() {
+        StringOutput stringOutput = new StringOutput();
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_1_COPY,Action.UNIQUE_NAMES, stringOutput);
+        comparePropertyFile.runVerboseComparison();
+        assertFalse(stringOutput.result().isEmpty());
+        tearDown();
+    }
+
+    @Test
+    public void testRunWithLoadingStrategy() {
+        StringOutput stringOutput = new StringOutput();
+        comparePropertyFile = new ComparePropertyFile(new LoadingStrategyMock(PROPERTY_1, PROPERTY_1_COPY),Action.UNIQUE_NAMES, stringOutput);
+        comparePropertyFile.runVerboseComparison();
+        assertFalse(stringOutput.result().isEmpty());
+        tearDown();
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testProperty1IsNull() {
         comparePropertyFile = new ComparePropertyFile(null, PROPERTY_1_COPY, Action.UNIQUE_NAMES, null);
+        comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty1IsEmpty() {
         comparePropertyFile = new ComparePropertyFile("  ", PROPERTY_1_COPY, Action.UNIQUE_NAMES, null);
+        comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty2IsNull() {
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1, null, Action.UNIQUE_NAMES, null);
+        comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty2IsEmpty() {
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1, "       ", Action.UNIQUE_NAMES, null);
+        comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty1NotFound() {
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1 + "non", PROPERTY_2, Action.UNIQUE_NAMES, null);
+        comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty2NotFound() {
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2 + "non", Action.UNIQUE_NAMES, null);
+        comparePropertyFile.runComparison();
         tearDown();
     }
 
