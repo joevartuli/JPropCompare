@@ -67,7 +67,6 @@ public class Comparator {
                     nextArgument = Arguments.getArgument(arg);
                     if (nextArgument == null) {
                         out.println(Constants.NOT_VALID_ARG + arg);
-                        printHelpMessage();
                     }
                 }
             }
@@ -85,9 +84,9 @@ public class Comparator {
 
                 Output output;
                 if (outputFilename != null) {
-                   output = new FileOutput(outputFilename);
+                   output = new FileOutput(outputFilename, propertyName1, propertyName2);
                 } else {
-                   output = new ConsoleOutput();
+                   output = new ConsoleOutput(propertyName1, propertyName2);
                 }
 
                 if (loadingStrategy != null) {
@@ -112,9 +111,6 @@ public class Comparator {
             if (loadedClass.isAssignableFrom(LoadingStrategy.class)) {
                 try {
                     loadingStrategy = (LoadingStrategy) loadedClass.newInstance();
-                    loadingStrategy.setPropertyNameOne(propertyName1);
-                    loadingStrategy.setPropertyNameTwo(propertyName2);
-                    loadingStrategy.setArgs(args);
                 } catch (InstantiationException e) {
                     throw new LoadingStrategyException(Constants.CLASS_NOT_CREATED.replace(Constants.CLASS_SUBSTITUTE, loadingStrategyClassName), e);
                 } catch (IllegalAccessException e) {

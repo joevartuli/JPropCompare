@@ -23,8 +23,8 @@ public class ComparePropertyFilesTest {
 
     @Test
     public void testRun() {
-        StringOutput stringOutput = new StringOutput();
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_1_COPY,Action.UNIQUE_NAMES, stringOutput);
+        StringOutput stringOutput = new StringOutput(PROPERTY_1, PROPERTY_2);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.UNIQUE_NAMES, stringOutput);
         comparePropertyFile.runVerboseComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
@@ -32,8 +32,8 @@ public class ComparePropertyFilesTest {
 
     @Test
     public void testRunWithLoadingStrategy() {
-        StringOutput stringOutput = new StringOutput();
-        comparePropertyFile = new ComparePropertyFile(new LoadingStrategyMock(PROPERTY_1, PROPERTY_1_COPY),Action.UNIQUE_NAMES, stringOutput);
+        StringOutput stringOutput = new StringOutput(PROPERTY_1, PROPERTY_1_COPY);
+        comparePropertyFile = new ComparePropertyFile(new LoadingStrategyMock(PROPERTY_1, PROPERTY_1_COPY), Action.UNIQUE_NAMES, stringOutput);
         comparePropertyFile.runVerboseComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();

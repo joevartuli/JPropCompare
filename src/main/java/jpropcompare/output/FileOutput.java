@@ -16,7 +16,8 @@ public class FileOutput extends StandardOutputFormatter {
     private String filename;
     private File fileOutput;
 
-    public FileOutput(String filename) {
+    public FileOutput(String filename, String propertyFilenameOne, String propertyFilenameTwo) {
+        super(propertyFilenameOne, propertyFilenameTwo);
         this.stringBuilder = new StringBuilder();
         this.filename = filename;
         setup();

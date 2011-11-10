@@ -13,6 +13,14 @@ import java.util.Map;
  */
 public abstract class StandardOutputFormatter implements Output {
 
+    private String propertyOneName;
+    private String propertyTwoName;
+
+    protected StandardOutputFormatter(String propertyOneName, String propertyTwoName) {
+        this.propertyOneName = propertyOneName;
+        this.propertyTwoName = propertyTwoName;
+    }
+
     /**
      * Output string given to process
      * @param output - String to output
@@ -37,7 +45,7 @@ public abstract class StandardOutputFormatter implements Output {
 
         if (uniqueToPropertyFileOne != null && !uniqueToPropertyFileOne.isEmpty()) {
             propertyOneEmpty = false;
-            write(Constants.ENTRIES_UNIQUE + " property one:");
+            write(Constants.ENTRIES_UNIQUE + propertyOneName + ":");
             for (String name : uniqueToPropertyFileOne) {
                 write(Constants.PREFIX + name);
             }
@@ -45,7 +53,7 @@ public abstract class StandardOutputFormatter implements Output {
 
         if (uniqueToPropertyFileTwo != null && !uniqueToPropertyFileTwo.isEmpty()) {
             propertyTwoEmpty = false;
-            write(Constants.ENTRIES_UNIQUE + " property two:");
+            write(Constants.ENTRIES_UNIQUE + propertyTwoName  + ":");
             for (String name : uniqueToPropertyFileTwo) {
                 write(Constants.PREFIX + name);
             }

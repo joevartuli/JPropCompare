@@ -34,29 +34,4 @@ public class LoadingStrategyMock implements LoadingStrategy {
         return propertyTwo;
     }
 
-
-    @Override
-    public String getPropertyNameOne() {
-        return null;
-    }
-
-    @Override
-    public void setPropertyNameOne(String propertyName) {
-
-    }
-
-    @Override
-    public String getPropertyNameTwo() {
-        return null;
-    }
-
-    @Override
-    public void setPropertyNameTwo(String propertyName) {
-
-    }
-
-    @Override
-    public void setArgs(String[] args) {
-
-    }
 }
