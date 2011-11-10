@@ -24,8 +24,9 @@ public class ComparePropertyFilesTest {
     @Test
     public void testRun() {
         StringOutput stringOutput = new StringOutput(PROPERTY_1, PROPERTY_2);
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.UNIQUE_NAMES, stringOutput);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.COMPARE_VALUES, stringOutput);
         comparePropertyFile.runVerboseComparison();
+        //System.out.println(stringOutput.result());
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
     }

@@ -61,10 +61,10 @@ public abstract class StandardOutputFormatter implements Output {
 
         if (propertyValueDifferences != null && !propertyValueDifferences.isEmpty()) {
             propertyDifferencesEmpty = false;
-            write(Constants.DIFFERENCE);
+            write(Constants.DIFFERENCE + " " + propertyOneName + " | " + propertyTwoName);
             for (String key : propertyValueDifferences.keySet()) {
                 SimpleEntry<String, String> value = propertyValueDifferences.get(key);
-                write(key + " - one: " + value.getKey() + " <> two: " + value.getValue());
+                write(Constants.PREFIX + key + ": " + value.getKey() + " | " + value.getValue());
             }
         }
 
