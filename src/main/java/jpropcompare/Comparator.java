@@ -108,9 +108,10 @@ public class Comparator {
     private void instantiateLoadingStrategy() throws LoadingStrategyException {
         try {
             Class<?> loadedClass = this.getClass().getClassLoader().loadClass(loadingStrategyClassName);
-            if (loadedClass.isAssignableFrom(LoadingStrategy.class)) {
+            if (LoadingStrategy.class.isAssignableFrom(loadedClass)) {
                 try {
                     loadingStrategy = (LoadingStrategy) loadedClass.newInstance();
+                    loadingStrategy.initialise(propertyName1, propertyName2, args);
                 } catch (InstantiationException e) {
                     throw new LoadingStrategyException(Constants.CLASS_NOT_CREATED.replace(Constants.CLASS_SUBSTITUTE, loadingStrategyClassName), e);
                 } catch (IllegalAccessException e) {

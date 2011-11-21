@@ -12,13 +12,14 @@ public class LoadingStrategyMock implements LoadingStrategy {
     private Properties propertyOne;
     private Properties propertyTwo;
 
-    public LoadingStrategyMock(String filenameOne, String filenameTwo) {
+    @Override
+    public void initialise(String propertyFileNameOne, String propertyFileNameTwo, String[] args) {
         propertyOne = new Properties();
         propertyTwo = new Properties();
 
         try {
-            propertyOne.load(this.getClass().getClassLoader().getResourceAsStream(filenameOne));
-            propertyTwo.load(this.getClass().getClassLoader().getResourceAsStream(filenameTwo));
+            propertyOne.load(this.getClass().getClassLoader().getResourceAsStream(propertyFileNameOne));
+            propertyTwo.load(this.getClass().getClassLoader().getResourceAsStream(propertyFileNameTwo));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

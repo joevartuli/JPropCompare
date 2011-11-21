@@ -13,6 +13,14 @@ import java.util.Properties;
 public interface LoadingStrategy {
 
     /**
+     * Initialise the loading strategy with the property file names and additional arguments
+     * @param propertyFileNameOne - name of the first property file
+     * @param propertyFileNameTwo - name of the second property file
+     * @param args - additional arguments (used during the Comparator to pass additional arguments)
+     */
+    public void initialise(String propertyFileNameOne, String propertyFileNameTwo, String[] args);
+
+    /**
      * Returns the first finalised property file to compare
      * @return - finalised property file
      */

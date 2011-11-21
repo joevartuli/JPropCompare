@@ -1,5 +1,6 @@
 package jpropcompare.comparator;
 
+import jpropcompare.loading.strategy.LoadingStrategy;
 import jpropcompare.loading.strategy.LoadingStrategyMock;
 import jpropcompare.output.StringOutput;
 import org.junit.Test;
@@ -34,7 +35,9 @@ public class ComparePropertyFilesTest {
     @Test
     public void testRunWithLoadingStrategy() {
         StringOutput stringOutput = new StringOutput(PROPERTY_1, PROPERTY_1_COPY);
-        comparePropertyFile = new ComparePropertyFile(new LoadingStrategyMock(PROPERTY_1, PROPERTY_1_COPY), Action.UNIQUE_NAMES, stringOutput);
+        LoadingStrategy loadingStrategy = new LoadingStrategyMock();
+        loadingStrategy.initialise(PROPERTY_1, PROPERTY_1_COPY, new String[0]);
+        comparePropertyFile = new ComparePropertyFile(loadingStrategy, Action.UNIQUE_NAMES, stringOutput);
         comparePropertyFile.runVerboseComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
