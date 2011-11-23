@@ -117,6 +117,8 @@ public class Comparator {
                 } catch (IllegalAccessException e) {
                     throw new LoadingStrategyException(Constants.CLASS_NOT_CREATED.replace(Constants.CLASS_SUBSTITUTE, loadingStrategyClassName), e);
                 }
+            } else {
+                throw new LoadingStrategyException(Constants.CLASS_NOT_CREATED.replace(Constants.CLASS_SUBSTITUTE, loadingStrategyClassName));
             }
         } catch (ClassNotFoundException e) {
             throw new LoadingStrategyException(Constants.CLASS_NOT_FOUND.replace(Constants.CLASS_SUBSTITUTE, loadingStrategyClassName), e);
@@ -137,7 +139,12 @@ public class Comparator {
         stringBuilder.append("  -ls: custom loading strategy used to load properties in a complex way." + Constants.NEW_LINE);
         stringBuilder.append("       If this is used the values of p1 and p2 are injected into the class" + Constants.NEW_LINE);
         stringBuilder.append("       as a way for you to load different property structures in different ways." + Constants.NEW_LINE);
-        stringBuilder.append("  -a: action to perform");
+        stringBuilder.append("  -a: action to perform. Possible values");
+        stringBuilder.append("      1: ");
+        stringBuilder.append("      2: ");
+        stringBuilder.append("      3: ");
+        stringBuilder.append("      4: ");
+        stringBuilder.append("      5: ");
         out.println(stringBuilder.toString());
     }
 

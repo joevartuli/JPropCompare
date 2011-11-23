@@ -2,6 +2,7 @@ package jpropcompare.comparator;
 
 import static java.util.AbstractMap.*;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,12 +16,14 @@ public class ComparisonResult {
 
     private List<String> uniqueToPropertyOne;
     private List<String> uniqueToPropertyTwo;
-    private Map<String, SimpleEntry<String, String>> propertyValueDifferences;
+    private Map<String, SimpleEntry<String, String>> symmetricValueDifferences;
+    private Map<String, String> intersection;
 
-    public ComparisonResult(List<String> uniqueToPropertyOne, List<String> uniqueToPropertyTwo, Map<String, SimpleEntry<String, String>> propertyValueDifferences) {
+    public ComparisonResult(List<String> uniqueToPropertyOne, List<String> uniqueToPropertyTwo, Map<String, SimpleEntry<String, String>> symmetricValueDifferences, Map<String, String> intersection) {
         this.uniqueToPropertyOne = uniqueToPropertyOne;
         this.uniqueToPropertyTwo = uniqueToPropertyTwo;
-        this.propertyValueDifferences = propertyValueDifferences;
+        this.symmetricValueDifferences = symmetricValueDifferences;
+        this.intersection = intersection;
     }
 
     public List<String> getUniqueToPropertyOne() {
@@ -31,16 +34,21 @@ public class ComparisonResult {
         return uniqueToPropertyTwo;
     }
 
-    public Map<String, SimpleEntry<String, String>> getPropertyValueDifferences() {
-        return propertyValueDifferences;
+    public Map<String, SimpleEntry<String, String>> getSymmetricValueDifferences() {
+        return symmetricValueDifferences;
+    }
+
+    public Map<String, String> getIntersection() {
+        return intersection;
     }
 
     @Override
     public String toString() {
-        return "ComparisonResult{ " +
+        return "ComparisonResult{" +
                 "uniqueToPropertyOne=" + uniqueToPropertyOne +
                 ", uniqueToPropertyTwo=" + uniqueToPropertyTwo +
-                ", propertyValueDifferences=" + propertyValueDifferences +
-                " }";
+                ", symmetricValueDifferences=" + symmetricValueDifferences +
+                ", intersection=" + intersection +
+                '}';
     }
 }

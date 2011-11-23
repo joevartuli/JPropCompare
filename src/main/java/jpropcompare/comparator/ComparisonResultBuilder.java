@@ -1,5 +1,7 @@
 package jpropcompare.comparator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,12 +16,19 @@ public class ComparisonResultBuilder {
 
     private List<String> uniqueToPropertyOne;
     private List<String> uniqueToPropertyTwo;
-    private Map<String, SimpleEntry<String, String>> propertyValueDifferences;
+    private Map<String, SimpleEntry<String, String>> symmetricDifferencePropertyValues;
+    private Map<String, String> intersectionPropertyValues;
 
-    public ComparisonResult build() {
-        return new ComparisonResult(uniqueToPropertyOne, uniqueToPropertyTwo, propertyValueDifferences);
+    public ComparisonResultBuilder() {
+        this.uniqueToPropertyOne = new ArrayList<String>();
+        this.uniqueToPropertyTwo = new ArrayList<String>();
+        this.symmetricDifferencePropertyValues = new HashMap<String, SimpleEntry<String, String>>();
+        this.intersectionPropertyValues = new HashMap<String, String>();
     }
 
+    public ComparisonResult build() {
+        return new ComparisonResult(uniqueToPropertyOne, uniqueToPropertyTwo, symmetricDifferencePropertyValues, intersectionPropertyValues);
+    }
 
     public ComparisonResultBuilder setUniqueToPropertyOne(List<String> uniqueToPropertyOne) {
         this.uniqueToPropertyOne = uniqueToPropertyOne;
@@ -31,9 +40,13 @@ public class ComparisonResultBuilder {
         return this;
     }
 
-    public ComparisonResultBuilder setPropertyValueDifferences(Map<String, SimpleEntry<String, String>> propertyValueDifferences) {
-        this.propertyValueDifferences = propertyValueDifferences;
+    public ComparisonResultBuilder setSymmetricDifferencePropertyValues(Map<String, SimpleEntry<String, String>> symmetricDifferencePropertyValues) {
+        this.symmetricDifferencePropertyValues = symmetricDifferencePropertyValues;
         return this;
     }
 
+    public ComparisonResultBuilder setIntersectionPropertyValues(Map<String, String> intersectionPropertyValues) {
+        this.intersectionPropertyValues = intersectionPropertyValues;
+        return this;
+    }
 }

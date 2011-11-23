@@ -1,5 +1,6 @@
 package jpropcompare.comparator;
 
+import jpropcompare.output.StringOutput;
 import jpropcompare.utilities.PropertyUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class ComparePropertiesTest {
 
     @Test
     public void testFileWithNoDifference() {
-        compareProperties = new CompareProperties(propertyOne, copyOfPropertyOne, Action.UNIQUE_NAMES);
+        compareProperties = new CompareProperties(propertyOne, copyOfPropertyOne, Action.SYMMETRIC_DIFFERENCE_IN_NAME);
         ComparisonResult result = compareProperties.runComparison();
 
         assertTrue(result.getUniqueToPropertyOne().isEmpty());
@@ -51,7 +52,7 @@ public class ComparePropertiesTest {
 
     @Test
     public void testUniqueNameWithDifferences() {
-        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.UNIQUE_NAMES);
+        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.SYMMETRIC_DIFFERENCE_IN_NAME);
         ComparisonResult result = compareProperties.runComparison();
 
         List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
@@ -65,7 +66,7 @@ public class ComparePropertiesTest {
 
     @Test
     public void testValuesWithDifference() {
-        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.COMPARE_VALUES);
+        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.SYMMETRIC_DIFFERENCE_IN_VALUE);
         ComparisonResult result = compareProperties.runComparison();
 
         List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
@@ -78,7 +79,25 @@ public class ComparePropertiesTest {
         assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromOne, result.getUniqueToPropertyOne()));
         assertTrue(PropertyUtils.isConceptuallyEqual(expectedFromTwo, result.getUniqueToPropertyTwo()));
 
-        assertTrue(PropertyUtils.isConceptuallyEqual(expectedDifferences, result.getPropertyValueDifferences()));
+        assertTrue(PropertyUtils.isConceptuallyEqual(expectedDifferences, result.getSymmetricValueDifferences()));
+
+        tearDown();
+    }
+
+
+    @Test
+    public void testIntersectionOfValues() {
+        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.INTERSECTION_OF_VALUES);
+        ComparisonResult result = compareProperties.runComparison();
+
+        Map<String, String> intersection = new HashMap<String, String>();
+        intersection.put("common.1", "one");
+        intersection.put("common.2", "two");
+
+        assertTrue(result.getUniqueToPropertyOne().isEmpty());
+        assertTrue(result.getUniqueToPropertyTwo().isEmpty());
+
+        assertTrue(PropertyUtils.isConceptuallyEqual(result.getIntersection(), intersection));
 
         tearDown();
     }

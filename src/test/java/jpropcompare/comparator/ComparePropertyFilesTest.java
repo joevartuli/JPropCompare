@@ -25,7 +25,7 @@ public class ComparePropertyFilesTest {
     @Test
     public void testRun() {
         StringOutput stringOutput = new StringOutput(PROPERTY_1, PROPERTY_2);
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.COMPARE_VALUES, stringOutput);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2, Action.SYMMETRIC_DIFFERENCE_IN_VALUE, stringOutput);
         comparePropertyFile.runVerboseComparison();
         //System.out.println(stringOutput.result());
         assertFalse(stringOutput.result().isEmpty());
@@ -37,7 +37,7 @@ public class ComparePropertyFilesTest {
         StringOutput stringOutput = new StringOutput(PROPERTY_1, PROPERTY_1_COPY);
         LoadingStrategy loadingStrategy = new LoadingStrategyMock();
         loadingStrategy.initialise(PROPERTY_1, PROPERTY_1_COPY, new String[0]);
-        comparePropertyFile = new ComparePropertyFile(loadingStrategy, Action.UNIQUE_NAMES, stringOutput);
+        comparePropertyFile = new ComparePropertyFile(loadingStrategy, Action.SYMMETRIC_DIFFERENCE_IN_NAME, stringOutput);
         comparePropertyFile.runVerboseComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
@@ -45,42 +45,42 @@ public class ComparePropertyFilesTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty1IsNull() {
-        comparePropertyFile = new ComparePropertyFile(null, PROPERTY_1_COPY, Action.UNIQUE_NAMES, null);
+        comparePropertyFile = new ComparePropertyFile(null, PROPERTY_1_COPY, Action.SYMMETRIC_DIFFERENCE_IN_NAME, null);
         comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty1IsEmpty() {
-        comparePropertyFile = new ComparePropertyFile("  ", PROPERTY_1_COPY, Action.UNIQUE_NAMES, null);
+        comparePropertyFile = new ComparePropertyFile("  ", PROPERTY_1_COPY, Action.SYMMETRIC_DIFFERENCE_IN_NAME, null);
         comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty2IsNull() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, null, Action.UNIQUE_NAMES, null);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, null, Action.SYMMETRIC_DIFFERENCE_IN_NAME, null);
         comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testProperty2IsEmpty() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, "       ", Action.UNIQUE_NAMES, null);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, "       ", Action.SYMMETRIC_DIFFERENCE_IN_NAME, null);
         comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty1NotFound() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1 + "non", PROPERTY_2, Action.UNIQUE_NAMES, null);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1 + "non", PROPERTY_2, Action.SYMMETRIC_DIFFERENCE_IN_NAME, null);
         comparePropertyFile.runComparison();
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty2NotFound() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2 + "non", Action.UNIQUE_NAMES, null);
+        comparePropertyFile = new ComparePropertyFile(PROPERTY_1, PROPERTY_2 + "non", Action.SYMMETRIC_DIFFERENCE_IN_NAME, null);
         comparePropertyFile.runComparison();
         tearDown();
     }

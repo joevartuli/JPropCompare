@@ -3,8 +3,8 @@ package jpropcompare.comparator;
 /**
  * Defines the difference actions available to compare property files.
  * Actions available
- * - UNIQUE_NAMES: command line argument "uname"
- * - COMPARE_VALUES: command line argument "cvalue"
+ * - SYMMETRIC_DIFFERENCE_IN_VALUE: command line argument "1"
+ * - SYMMETRIC_DIFFERENCE_IN_NAME: command line argument "2"
  *
  * Author: Joe Vartuli
  * Date: 19/09/11
@@ -12,8 +12,13 @@ package jpropcompare.comparator;
  */
 public enum Action {
 
-    UNIQUE_NAMES("uname"),
-    COMPARE_VALUES("cvalue");
+    SYMMETRIC_DIFFERENCE_IN_VALUE("1"),
+    SYMMETRIC_DIFFERENCE_IN_NAME("2"),
+    INTERSECTION_OF_VALUES("3"),
+    UNION_IN_VALUE("4"),
+    UNION_IN_NAME("5");
+    //SIX("6"),
+    //SEVEN("7");
 
     private String action;
 
@@ -26,7 +31,7 @@ public enum Action {
      * @return - default Action
      */
     public static Action getDefaultAction() {
-        return UNIQUE_NAMES;
+        return SYMMETRIC_DIFFERENCE_IN_VALUE;
     }
 
     /**

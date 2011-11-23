@@ -23,7 +23,7 @@ public class PropertyUtils {
      * @param secondCollection - Set of property names
      * @return - unique property names that are present in the first set but not in the second
      */
-    public static List<String> difference(final Set<String> firstCollection, final Set<String> secondCollection) {
+    public static List<String> getSymmetricDifference(final Set<String> firstCollection, final Set<String> secondCollection) {
         List<String> difference = new ArrayList<String>(firstCollection);
         for (String value : secondCollection) {
             difference.remove(value);
@@ -32,13 +32,13 @@ public class PropertyUtils {
     }
 
 
-    public static Map<String, SimpleEntry<String, String>> propertyValueDifferences(Properties propertyFileOne, Properties propertyFileTwo) {
+    public static Map<String, SimpleEntry<String, String>> getSymmetricPropertyValueDifference(Properties propertyFileOne, Properties propertyFileTwo) {
         Map<String, SimpleEntry<String, String>>  differences = new HashMap<String, SimpleEntry<String, String>>();
 
         for (String key : propertyFileOne.stringPropertyNames()) {
             String propertyOneValue = propertyFileOne.getProperty(key);
             String propertyTwoValue = propertyFileTwo.getProperty(key);
-            if (propertyTwoValue != null && !propertyOneValue.equals(propertyTwoValue)) {
+            if (propertyOneValue != null && propertyTwoValue != null && !propertyOneValue.equals(propertyTwoValue)) {
                 differences.put(key, new SimpleEntry(propertyOneValue, propertyTwoValue));
             }
         }
@@ -56,8 +56,23 @@ public class PropertyUtils {
         return equal;
     }
 
-    public static boolean isConceptuallyEqual(Map<String, SimpleEntry<String, String>> mapOne, Map<String, SimpleEntry<String, String>> mapTwo) {
+    public static boolean isConceptuallyEqual(Map<?, ?> mapOne, Map<?, ?> mapTwo) {
        return mapOne.equals(mapTwo);
+    }
+
+
+    public static Map<String, String> getIntersectionOfPropertyValues(Properties propertyFileOne, Properties propertyFileTwo) {
+        Map<String, String>  intersection = new HashMap<String, String>();
+
+        for (String key : propertyFileOne.stringPropertyNames()) {
+            String propertyOneValue = propertyFileOne.getProperty(key);
+            String propertyTwoValue = propertyFileTwo.getProperty(key);
+             if (propertyOneValue != null && propertyTwoValue != null && propertyOneValue.equals(propertyTwoValue)) {
+                intersection.put(key, propertyOneValue);
+            }
+        }
+
+        return intersection;
     }
 
 

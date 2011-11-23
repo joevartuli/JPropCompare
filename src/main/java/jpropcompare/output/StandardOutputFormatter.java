@@ -41,7 +41,7 @@ public abstract class StandardOutputFormatter implements Output {
 
         List<String> uniqueToPropertyFileOne = result.getUniqueToPropertyOne();
         List<String> uniqueToPropertyFileTwo = result.getUniqueToPropertyTwo();
-        Map<String, SimpleEntry<String, String>> propertyValueDifferences = result.getPropertyValueDifferences();
+        Map<String, SimpleEntry<String, String>> propertyValueDifferences = result.getSymmetricValueDifferences();
 
         if (uniqueToPropertyFileOne != null && !uniqueToPropertyFileOne.isEmpty()) {
             propertyOneEmpty = false;
