@@ -1,6 +1,5 @@
 package jpropcompare.output;
 
-import java.io.Console;
 import java.io.PrintStream;
 
 /**
@@ -14,10 +13,12 @@ public class ConsoleOutput extends StandardOutputFormatter {
 
     public ConsoleOutput(String propertyFilenameOne, String propertyFilenameTwo) {
         super(propertyFilenameOne, propertyFilenameTwo);
+
     }
 
     /**
      * Writes the data directly to the System.out
+     *
      * @param data - data to output
      */
     @Override
