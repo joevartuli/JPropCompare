@@ -11,6 +11,7 @@ public interface Output {
 
     /**
      * Outputs the result of the comparison test in a given format
+     *
      * @param result - result to output
      */
     public void outputResult(ComparisonResult result);

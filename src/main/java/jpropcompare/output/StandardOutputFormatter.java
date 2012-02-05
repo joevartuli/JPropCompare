@@ -4,6 +4,7 @@ import jpropcompare.Constants;
 import jpropcompare.comparator.ComparisonResult;
 
 import static java.util.AbstractMap.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,29 +16,20 @@ public abstract class StandardOutputFormatter implements Output {
 
     private String propertyOneName;
     private String propertyTwoName;
+    private boolean propertyOneEmpty;
+    private boolean propertyTwoEmpty;
+    private boolean propertyDifferencesEmpty;
 
     protected StandardOutputFormatter(String propertyOneName, String propertyTwoName) {
         this.propertyOneName = propertyOneName;
         this.propertyTwoName = propertyTwoName;
+        this.propertyOneEmpty = true;
+        this.propertyTwoEmpty = true;
+        this.propertyDifferencesEmpty = true;
     }
 
-    /**
-     * Output string given to process
-     * @param output - String to output
-     */
-    public abstract void write(String output);
-
-    /**
-     * Method that allows the instantiation or destruction of
-     * any required or open resources
-     */
-    public abstract void finalise();
-
-    public final void outputResult(ComparisonResult result) {
-
-        boolean propertyOneEmpty = true;
-        boolean propertyTwoEmpty = true;
-        boolean propertyDifferencesEmpty = true;
+    @Override
+    public void outputResult(ComparisonResult result) {
 
         List<String> uniqueToPropertyFileOne = result.getUniqueToPropertyOne();
         List<String> uniqueToPropertyFileTwo = result.getUniqueToPropertyTwo();
@@ -53,7 +45,7 @@ public abstract class StandardOutputFormatter implements Output {
 
         if (uniqueToPropertyFileTwo != null && !uniqueToPropertyFileTwo.isEmpty()) {
             propertyTwoEmpty = false;
-            write(Constants.ENTRIES_UNIQUE + propertyTwoName  + ":");
+            write(Constants.ENTRIES_UNIQUE + propertyTwoName + ":");
             for (String name : uniqueToPropertyFileTwo) {
                 write(Constants.PREFIX + name);
             }
@@ -74,5 +66,18 @@ public abstract class StandardOutputFormatter implements Output {
 
         finalise();
     }
+
+    /**
+     * Output string given to process
+     *
+     * @param output - String to output
+     */
+    public abstract void write(String output);
+
+    /**
+     * Method that allows the instantiation or destruction of
+     * any required or open resources
+     */
+    public abstract void finalise();
 
 }
