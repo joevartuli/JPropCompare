@@ -1,16 +1,15 @@
 package jpropcompare.validation;
 
+import jpropcompare.exception.PropertyValidationException;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joe
+ * Author: Joe Vartuli
  * Date: 30/01/12
- * Time: 8:13 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ValidateProperties {
 
@@ -36,16 +35,16 @@ public class ValidateProperties {
         this.rules = validationRuleBuilder.build(rules);
     }
 
-
-    
+    /**
+     * Validate the given property file with the rules passed in
+     * @throws PropertyValidationException - thrown when a property file value fails validation
+     */
     public void runValidation() {
         for (String propertyName : rules.keySet()) {
             Pattern pattern = rules.get(propertyName);
             Matcher matcher = pattern.matcher(propertiesToValidate.getProperty(propertyName));
-            if (matcher.matches()) {
-                System.out.println(propertyName + " with value " + propertiesToValidate.getProperty(propertyName) + " matches " + pattern);
-            } else {
-                System.out.println(propertyName + " with value " + propertiesToValidate.getProperty(propertyName) + " does not match " + pattern);
+            if (!matcher.matches()) {
+                throw new PropertyValidationException(propertyName + " with value " + propertiesToValidate.getProperty(propertyName) + " matches " + pattern);
             }
         }
     }

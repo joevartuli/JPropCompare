@@ -13,6 +13,7 @@ import jpropcompare.output.Output;
 import java.io.PrintStream;
 
 /**
+ * The Comparator class provides access to the ComparePropertyFile tool via the command line.
  * Author: Joe Vartuli
  * Date: 19/09/11
  */
@@ -41,9 +42,28 @@ public class Comparator {
     public void run(String... args) {
         this.args = args;
 
+        parseArguments();
+
+        try {
+            instantiateComparisonTool();
+            comparePropertyFile.runVerboseComparison();
+
+        } catch (ComparatorException comparatorException) {
+            out.println(comparatorException.getMessage() + Constants.NEW_LINE);
+            printHelpMessage();
+        }
+    }
+
+    /**
+     * Parses the command line arguments passed in
+     */
+    private void parseArguments() {
+
         Arguments nextArgument = null;
+
         if (args != null) {
             for (String arg : args) {
+
                 if (nextArgument != null) {
                     switch (nextArgument) {
                         case PROPERTY_1:
@@ -70,41 +90,44 @@ public class Comparator {
                     }
                 }
             }
-        }
 
-        if (isArgumentValid()) {
-            try {
-                if (loadingStrategyClassName != null) {
-                    instantiateLoadingStrategy();
-                }
-
-                if (actionName != null) {
-                    determineActionToPerform();
-                }
-
-                Output output;
-                if (outputFilename != null) {
-                   output = new FileOutput(outputFilename, propertyName1, propertyName2);
-                } else {
-                   output = new ConsoleOutput(propertyName1, propertyName2);
-                }
-
-                if (loadingStrategy != null) {
-                    comparePropertyFile = new ComparePropertyFile(loadingStrategy, action, output);
-                } else {
-                    comparePropertyFile = new ComparePropertyFile(propertyName1, propertyName2, action, output);
-                }
-
-                comparePropertyFile.runVerboseComparison();
-            } catch (ComparatorException e) {
-                out.println(e.getMessage());
-                printHelpMessage();
-            }
-        } else {
-            printHelpMessage();
         }
     }
 
+    /**
+     * Instantiates the ComparePropertyFile object
+     * @return true if the ComparePropertyFile object was instantiated correctly, otherwise false
+     */
+    private void instantiateComparisonTool() throws ComparatorException {
+
+        validateArguments();
+        if (loadingStrategyClassName != null) {
+            instantiateLoadingStrategy();
+        }
+
+        if (actionName != null) {
+            determineActionToPerform();
+        }
+
+        Output output;
+        if (outputFilename != null) {
+            output = new FileOutput(outputFilename, propertyName1, propertyName2);
+        } else {
+            output = new ConsoleOutput(propertyName1, propertyName2);
+        }
+
+        if (loadingStrategy != null) {
+            comparePropertyFile = new ComparePropertyFile(loadingStrategy, action, output);
+        } else {
+            comparePropertyFile = new ComparePropertyFile(propertyName1, propertyName2, action, output);
+        }
+    }
+
+    /**
+     * If a Loading Strategy class is provided attempt to instantiate the class and ensure it implements
+     * the LoadingStrategy interface
+     * @throws LoadingStrategyException
+     */
     private void instantiateLoadingStrategy() throws LoadingStrategyException {
         try {
             Class<?> loadedClass = this.getClass().getClassLoader().loadClass(loadingStrategyClassName);
@@ -125,6 +148,10 @@ public class Comparator {
         }
     }
 
+    /**
+     * Determines the action to perform on the given property files
+     * @throws ActionNotFoundException
+     */
     private void determineActionToPerform() throws ActionNotFoundException {
         this.action = Action.getAction(actionName);
         if (this.action == null) {
@@ -132,6 +159,9 @@ public class Comparator {
         }
     }
 
+    /**
+     *  Prints the help message
+     */
     private void printHelpMessage() {
         StringBuilder stringBuilder = new StringBuilder("Usage: java - jar <JAR_FILE> -p1 <FILE_NAME> -p2 <FILE_NAME> [-ls <LOADING_STRATEGY>] [-a <ACTION>]" + Constants.NEW_LINE);
         stringBuilder.append("  -p1: file of the property name to compare" + Constants.NEW_LINE);
@@ -139,19 +169,30 @@ public class Comparator {
         stringBuilder.append("  -ls: custom loading strategy used to load properties in a complex way." + Constants.NEW_LINE);
         stringBuilder.append("       If this is used the values of p1 and p2 are injected into the class" + Constants.NEW_LINE);
         stringBuilder.append("       as a way for you to load different property structures in different ways." + Constants.NEW_LINE);
-        stringBuilder.append("  -a: action to perform. Possible values");
-        stringBuilder.append("      1: ");
-        stringBuilder.append("      2: ");
-        stringBuilder.append("      3: ");
-        stringBuilder.append("      4: ");
-        stringBuilder.append("      5: ");
+        stringBuilder.append("  -a: action to perform. Possible values" + Constants.NEW_LINE);
+        
+        for (Action possibleAction : Action.values())  {
+            stringBuilder.append("      " + possibleAction.getActionValue() + ": " + possibleAction.getActionDescription() +  Constants.NEW_LINE);
+        }
         out.println(stringBuilder.toString());
     }
 
-    private boolean isArgumentValid() {
-        return propertyName1 != null & propertyName2 != null;
+    /**
+     * Validates the given command line arguments
+     * @throws ComparatorException
+     */
+    private void validateArguments() throws ComparatorException {
+        if (propertyName1 == null) {
+            throw new ComparatorException("First property name file can not be null");
+        }
+        if (propertyName2 == null) {
+            throw new ComparatorException("Second property name file can not be null");
+        }
     }
 
+    /**
+     * Current supported arguments
+     */
     private enum Arguments {
 
         PROPERTY_1("-p1"),
@@ -180,7 +221,10 @@ public class Comparator {
         }
     }
 
-
+    /**
+     * Main method used to instantiate the comparison tool
+     * @param args - command line arguments
+     */
     public static void main(String... args) {
         Comparator comparator = new Comparator(null);
         comparator.run(args);

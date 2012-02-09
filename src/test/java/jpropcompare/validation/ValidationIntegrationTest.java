@@ -1,5 +1,6 @@
 package jpropcompare.validation;
 
+import jpropcompare.exception.PropertyValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ public class ValidationIntegrationTest {
     }
 
 
-    @Test
+    @Test(expected = PropertyValidationException.class)
     public void test() {
         ValidateProperties validateProperties = new ValidateProperties(propertyRules, propertiesToValidate);
         validateProperties.runValidation();

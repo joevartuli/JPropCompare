@@ -96,10 +96,11 @@ public class ComparePropertyFile {
 
     /**
      *
-     * @param propertiesOne
-     * @param propertiesTwo
-     * @param action
-     * @param output
+     * Initialises this class with a the two property files, the action to perform and an output class
+     * @param propertiesOne - first property file used in the comparison
+     * @param propertiesTwo - second property file used in the comparison
+     * @param action - action to perform on the property files
+     * @param output - where to output the results
      */
     public ComparePropertyFile(Properties propertiesOne, Properties propertiesTwo, Action action, Output output) {
         this.action = action;

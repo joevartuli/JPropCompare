@@ -6,6 +6,8 @@ import java.util.*;
 import static java.util.AbstractMap.*;
 
 /**
+ * The CompareProperties class allows two properties files to be compared with the supplied action
+ * This class is for internal use only. See {@link ComparePropertyFile} for external use
  * User: Joe Vartuli
  * Date: 24/10/11
  */

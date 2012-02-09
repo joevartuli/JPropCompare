@@ -34,6 +34,14 @@ public enum Action {
         return SYMMETRIC_DIFFERENCE_IN_VALUE;
     }
 
+    public String getActionValue() {
+        return action;
+    }
+    
+    public String getActionDescription() {
+        return "description";
+    }
+
     /**
      * Finds the matching action based on the string passed in
      * @param action - action requested

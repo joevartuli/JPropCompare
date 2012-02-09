@@ -3,18 +3,13 @@ package jpropcompare.validation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joe
+ * Author: Joe Vartuli
  * Date: 27/01/12
- * Time: 6:36 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ValidationRuleBuilder {
-
 
     //Best way to handle patterns that are allowed to be empty?
     private static final String NUMBER = "{num}";
@@ -47,7 +42,6 @@ public class ValidationRuleBuilder {
 
         return this.rules;
     }
-
 
 
     private void createRule(String property, String rule) {

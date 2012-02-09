@@ -26,14 +26,86 @@ public class ComparatorTest {
     }
 
     @Test
-    public void testComparator() {
+    public void testComparatorWithNullArguments() {
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        printStream = new PrintStream(byteArrayOutputStream);
+        comparator = new Comparator(printStream);
+        
+        String[] args = {};
+
+        comparator.run(args);
+
+        String expectedErrorMsg = "First property name file can not be null";
+        String errorMsg = byteArrayOutputStream.toString();
+
+        assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
+
+        tearDown();
+    }
+
+    @Test
+    public void testComparatorWithFirstPropertyArgument() {
         byteArrayOutputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(byteArrayOutputStream);
         comparator = new Comparator(printStream);
 
-        comparator.run((String[]) null);
+        String[] args = {"-p1", "first"};
 
-        assertTrue("Usage".equalsIgnoreCase(byteArrayOutputStream.toString().substring(0, 5)));
+        comparator.run(args);
+
+        String expectedErrorMsg = "Second property name file can not be null";
+        String errorMsg = byteArrayOutputStream.toString();
+
+        assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
+
+        tearDown();
+    }
+
+    @Test
+    public void testComparatorWithLoadingStrategy() {
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        printStream = new PrintStream(byteArrayOutputStream);
+        comparator = new Comparator(printStream);
+
+        String[] args = {"-ls", "LoadingStrategySupplied.class"};
+
+        comparator.run(args);
+
+        String expectedErrorMsg = "First property name file can not be null";
+        String errorMsg = byteArrayOutputStream.toString();
+
+        assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
+
+        tearDown();
+    }
+
+    @Test
+    public void testComparatorWithIncorrectAction() {
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        printStream = new PrintStream(byteArrayOutputStream);
+        comparator = new Comparator(printStream);
+
+        String[] args = {"-p1", "p1", "-p2", "p2", "-a", "11"};
+
+        comparator.run(args);
+
+        String expectedErrorMsg = "The requested action 11 could not be found";
+        String errorMsg = byteArrayOutputStream.toString();
+
+        assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
+
+        tearDown();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testComparatorWithCorrectArguments() {
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        printStream = new PrintStream(byteArrayOutputStream);
+        comparator = new Comparator(printStream);
+
+        String[] args = {"-p1", "p1", "-p2", "p2", "-a", "4"};
+
+        comparator.run(args);
 
         tearDown();
     }
