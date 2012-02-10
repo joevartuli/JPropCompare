@@ -9,11 +9,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joe
+ * User: Joe Vartuli
  * Date: 30/01/12
- * Time: 8:21 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ValidationIntegrationTest {
 

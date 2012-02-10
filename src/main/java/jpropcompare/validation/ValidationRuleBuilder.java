@@ -11,15 +11,6 @@ import java.util.regex.Pattern;
  */
 public class ValidationRuleBuilder {
 
-    //Best way to handle patterns that are allowed to be empty?
-    private static final String NUMBER = "{num}";
-    private static final String URL = "{url}";
-    private static final String EMAIL = "{email}";
-    
-    private static final Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
-    private static final Pattern URL_PATTERN = Pattern.compile("(http://)?[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]+(:[0-9]+)?(/)?");
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("[0-9]");
-
     private Map<String, Pattern> rules;
 
     protected ValidationRuleBuilder() {
@@ -45,14 +36,44 @@ public class ValidationRuleBuilder {
 
 
     private void createRule(String property, String rule) {
-        if (NUMBER.equals(rule)) {
-            rules.put(property, NUMBER_PATTERN);
-        } else if (URL.equals(rule)) {
-            rules.put(property, URL_PATTERN);
-        } else if (EMAIL.equals(rule)) {
-            rules.put(property, EMAIL_PATTERN);
-        } else {
+        boolean matchFound = false;
+
+        for (ValidationRules validationRule : ValidationRules.values()) {
+            if (validationRule.getRuleType().equals(rule)) {
+                rules.put(property, validationRule.getMatchingPattern());
+                matchFound = true;
+                break;
+            }
+        }
+
+        if (!matchFound) {
             rules.put(property, Pattern.compile(rule));
+        }
+
+    }
+
+    private enum ValidationRules {
+
+        //Best way to handle patterns that are allowed to be empty?
+        NUMBER("{num}", Pattern.compile("[0-9]+")),
+        URL("{url}", Pattern.compile("(http://)?[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]+(:[0-9]+)?(/)?")),
+        EMAIL("{email}", Pattern.compile("[A-Za-z\\+0-9\\.\\-]+@[A-Za-z0-9\\.\\-]+\\.[a-zA-Z]+")),
+        BOOLEAN("{bool}", Pattern.compile("true|false"));
+
+        private Pattern matchingPattern;
+        private String ruleType;
+
+        ValidationRules(String ruleType, Pattern matchingPattern) {
+            this.ruleType = ruleType;
+            this.matchingPattern = matchingPattern;
+        }
+
+        public Pattern getMatchingPattern() {
+            return matchingPattern;
+        }
+
+        public String getRuleType() {
+            return ruleType;
         }
     }
 
