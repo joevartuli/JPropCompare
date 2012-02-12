@@ -4,12 +4,13 @@ import jpropcompare.comparator.Action;
 import jpropcompare.comparator.ComparePropertyFile;
 import jpropcompare.exception.ActionNotFoundException;
 import jpropcompare.exception.ComparatorException;
-import jpropcompare.loading.strategy.LoadingStrategy;
 import jpropcompare.exception.LoadingStrategyException;
+import jpropcompare.loading.strategy.LoadingStrategy;
 import jpropcompare.output.ConsoleOutput;
 import jpropcompare.output.FileOutput;
 import jpropcompare.output.Output;
 
+import java.io.File;
 import java.io.PrintStream;
 
 /**
@@ -119,7 +120,9 @@ public class Comparator {
         if (loadingStrategy != null) {
             comparePropertyFile = new ComparePropertyFile(loadingStrategy, action, output);
         } else {
-            comparePropertyFile = new ComparePropertyFile(propertyName1, propertyName2, action, output);
+            File fileOne = new File(propertyName1);
+            File fileTwo = new File(propertyName2);
+            comparePropertyFile = new ComparePropertyFile(fileOne, fileTwo, action, output);
         }
     }
 

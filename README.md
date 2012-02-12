@@ -14,21 +14,17 @@ Integrate jPropCompare into your unit tests to fail a build when property entrie
 Use jPropCompare as a command line tool to quickly compare property files from different environments.
 
 ### Maven Plugin 
-A maven plugin has been requested, this will be coming soon)
+A maven plugin has been requested, this will be coming soon
 
 How to use jPropCompare
 -------
-jPropCompare uses the concept of  
+jPropCompare uses the concept of `Actions` to state how the property files should be compared. Available actions currently include:
 
-`Actions`
-
-to state how the property files should be compared. Available actions currently include:
-
-* Symmetric difference in property name: Finds all property keys that are unique to a property file. This action is useful for comparing property files between each environment, where the key needs to be in each environment but the value can change 
+* Symmetric difference in property name: Finds all property keys that are unique to a property file. This action is useful for comparing property files between each environment, where keys remain constant but the value changes
 * Symmetric difference in property value: Finds all property keys that are either unique to a property file or where the same property key differ in value
-* Intersection of values:
-* Union in name:
-* Union in value:
+* Intersection of values: Finds all property keys that are in both property files and have the same value.
+* Union of names: Feature request, coming soon.
+* Union of values: Feature request, coming soon.
 
 
 

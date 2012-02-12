@@ -12,18 +12,20 @@ package jpropcompare.comparator;
  */
 public enum Action {
 
-    SYMMETRIC_DIFFERENCE_IN_VALUE("1"),
-    SYMMETRIC_DIFFERENCE_IN_NAME("2"),
-    INTERSECTION_OF_VALUES("3"),
-    UNION_IN_VALUE("4"),
-    UNION_IN_NAME("5");
+    SYMMETRIC_DIFFERENCE_IN_VALUE("1", "Finds all property keys that are either unique to a property file or where the same property key differ in value"),
+    SYMMETRIC_DIFFERENCE_IN_NAME("2", "Finds all property keys that are unique to a property file"),
+    INTERSECTION_OF_VALUES("3", "Finds all property keys that are in both property files and have the same value"),
+    UNION_IN_VALUE("4", "Currently unsupported"),
+    UNION_IN_NAME("5", "Currently unsupported");
     //SIX("6"),
     //SEVEN("7");
 
     private String action;
+    private String description;
 
-    Action(String action) {
+    Action(String action, String description) {
         this.action = action;
+        this.description = description;
     }
 
     /**
@@ -39,7 +41,7 @@ public enum Action {
     }
     
     public String getActionDescription() {
-        return "description";
+        return description;
     }
 
     /**

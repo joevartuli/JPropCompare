@@ -2,13 +2,9 @@ package jpropcompare.comparator;
 
 import jpropcompare.loading.strategy.LoadingStrategy;
 import jpropcompare.output.Output;
-import jpropcompare.utilities.PropertyUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-
-import static java.util.AbstractMap.*;
+import java.io.*;
+import java.util.Properties;
 
 /**
  * ComparePropertyFile is the main class that provides comparison
@@ -90,6 +86,33 @@ public class ComparePropertyFile {
                     //
                 }
             }
+        }
+
+    }
+
+    /**
+     * Initialises this class with a the two files of the property file, action to perform and an output class
+     * @param fileOne - file representing the first property file used in the comparison.
+     * @param fileTwo - file representing the second property file used in the comparison.
+     * @param action - action to perform on the property files
+     * @param output - where to output the results
+     */
+    public ComparePropertyFile(File fileOne, File fileTwo, Action action, Output output) {
+        this((Properties)null, (Properties)null, action, output);
+
+        try {
+            FileReader fileReaderOne = new FileReader(fileOne);
+            FileReader fileReaderTwo = new FileReader(fileTwo);
+
+            propertyFileOne = new Properties();
+            propertyFileOne.load(fileReaderOne);
+
+            propertyFileTwo = new Properties();
+            propertyFileTwo.load(fileReaderTwo);
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("Could not find file", e);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("An exception occurred when loading file", e);
         }
 
     }

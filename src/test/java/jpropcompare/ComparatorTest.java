@@ -4,6 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 /**
@@ -97,7 +98,7 @@ public class ComparatorTest {
         tearDown();
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testComparatorWithCorrectArguments() {
         byteArrayOutputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(byteArrayOutputStream);
