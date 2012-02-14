@@ -110,18 +110,21 @@ public class Comparator {
             determineActionToPerform();
         }
 
+        File fileOne = new File(propertyName1);
+        File fileTwo = new File(propertyName2);
+        String fileOneName = fileOne.getName();
+        String fileTwoName = fileTwo.getName();
+
         Output output;
         if (outputFilename != null) {
-            output = new FileOutput(outputFilename, propertyName1, propertyName2);
+            output = new FileOutput(outputFilename, fileOneName, fileTwoName);
         } else {
-            output = new ConsoleOutput(propertyName1, propertyName2);
+            output = new ConsoleOutput(fileOneName, fileTwoName);
         }
 
         if (loadingStrategy != null) {
             comparePropertyFile = new ComparePropertyFile(loadingStrategy, action, output);
         } else {
-            File fileOne = new File(propertyName1);
-            File fileTwo = new File(propertyName2);
             comparePropertyFile = new ComparePropertyFile(fileOne, fileTwo, action, output);
         }
     }
