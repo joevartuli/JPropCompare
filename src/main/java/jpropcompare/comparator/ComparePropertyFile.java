@@ -32,65 +32,6 @@ public class ComparePropertyFile {
     }
 
     /**
-     * Initialises this class with a the two file names of the property file, action to perform and an output class
-     * @param fileNameOne - file name representing the first property file used in the comparison. Needs to be on the classpath
-     * @param fileNameTwo - file name representing the second property file used in the comparison. Needs to be on the classpath
-     * @param action - action to perform on the property files
-     * @param output - where to output the results
-     */
-    public ComparePropertyFile(String fileNameOne, String fileNameTwo, Action action, Output output) {
-        this((Properties)null, (Properties)null, action, output);
-
-        if (fileNameOne == null || fileNameOne.trim().equals("")) {
-            throw new IllegalArgumentException("fileNameOne can not be null or empty");
-        }
-
-        if (fileNameTwo == null || fileNameTwo.trim().equals("")) {
-            throw new IllegalArgumentException("fileNameTwo can not be null or empty");
-        }
-
-        InputStream inputStreamOne = null;
-        InputStream inputStreamTwo = null;
-
-        try {
-            inputStreamOne = this.getClass().getClassLoader().getResourceAsStream(fileNameOne);
-            propertyFileOne = new Properties();
-            propertyFileOne.load(inputStreamOne);
-        } catch (NullPointerException e) {
-            throw new NullPointerException("Could not find property file with name " + fileNameOne);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("An exception occurred when loading property file with name " + fileNameOne, e);
-        } finally {
-            if (inputStreamOne != null) {
-                try {
-                    inputStreamOne.close();
-                } catch (IOException e) {
-                    //
-                }
-            }
-        }
-
-        try {
-            inputStreamTwo = this.getClass().getClassLoader().getResourceAsStream(fileNameTwo);
-            propertyFileTwo = new Properties();
-            propertyFileTwo.load(inputStreamTwo);
-        } catch (NullPointerException e) {
-            throw new NullPointerException("Could not find property file with name " + fileNameTwo);
-        }  catch (IOException e) {
-            throw new IllegalArgumentException("An exception occurred when loading file with name " + fileNameTwo, e);
-        } finally {
-            if (inputStreamTwo != null) {
-                try {
-                    inputStreamTwo.close();
-                } catch (IOException e) {
-                    //
-                }
-            }
-        }
-
-    }
-
-    /**
      * Initialises this class with a the two files of the property file, action to perform and an output class
      * @param fileOne - file representing the first property file used in the comparison.
      * @param fileTwo - file representing the second property file used in the comparison.

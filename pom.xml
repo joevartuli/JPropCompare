@@ -42,9 +42,6 @@
                             <classifier>standalone</classifier>
                             <archive>
                                 <manifest>
-                                    <addClasspath>true</addClasspath>
-                                    <classpathLayoutType>custom</classpathLayoutType>
-                                    <customClasspathLayout>.</customClasspathLayout>
                                     <mainClass>jpropcompare.Comparator</mainClass>
                                 </manifest>
                             </archive>
@@ -70,9 +67,10 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.1</version>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
