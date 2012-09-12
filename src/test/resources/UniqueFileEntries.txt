@@ -1,0 +1,8 @@
+Entries unique to filename1:
+  + property1,1234
+  + property1,2345
+  + property1,3456
+Entries unique to filename2:
+  + property2,1234
+  + property2,2345
+  + property2,3456
