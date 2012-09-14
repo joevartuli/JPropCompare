@@ -80,5 +80,13 @@
 
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>nexus</name>
+            <url>http://localhost:8989/nexus/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
+
 
 </project>

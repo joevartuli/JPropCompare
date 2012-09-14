@@ -17,6 +17,7 @@ import java.io.PrintStream;
  * The Comparator class provides access to the ComparePropertyFile tool via the command line.
  * Author: Joe Vartuli
  * Date: 19/09/11
+ * 
  */
 public class Comparator {
 
