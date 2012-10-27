@@ -13,15 +13,15 @@ import static java.util.AbstractMap.*;
  */
 public class CompareProperties {
 
-    private Properties first;
-    private Properties second;
+    private Properties a;
+    private Properties b;
     private Action action;
     private ComparisonResultBuilder comparisonResultBuilder;
 
-    protected CompareProperties(Properties first, Properties second, Action action) {
+    protected CompareProperties(Properties a, Properties b, Action action) {
         this.action = action;
-        this.first = first;
-        this.second = second;
+        this.a = a;
+        this.b = b;
         this.comparisonResultBuilder = new ComparisonResultBuilder();
     }
 
@@ -61,8 +61,8 @@ public class CompareProperties {
      */
     private void findSymmetricDifferenceInPropertyNames() {
 
-        Set<String> propertyNamesFromFirst = first.stringPropertyNames();
-        Set<String> propertyNamesFromSecond = second.stringPropertyNames();
+        Set<String> propertyNamesFromFirst = a.stringPropertyNames();
+        Set<String> propertyNamesFromSecond = b.stringPropertyNames();
 
         List<String> uniqueToFirst = PropertyUtils.getSymmetricDifference(propertyNamesFromFirst, propertyNamesFromSecond);
         List<String> uniqueToSecond = PropertyUtils.getSymmetricDifference(propertyNamesFromSecond, propertyNamesFromFirst);
@@ -72,14 +72,14 @@ public class CompareProperties {
 
     /**
      * In addition to finding unique property names in each file, compare property values
-     * will also render the property names where the values are different from the first
-     * and second property file.
+     * will also render the property names where the values are different from the a
+     * and b property file.
      */
     private void findSymmetricDifferenceInPropertyValues() {
 
         findSymmetricDifferenceInPropertyNames();
 
-        Map<String, SimpleEntry<String, String>> differences = PropertyUtils.getSymmetricPropertyValueDifference(first, second);
+        Map<String, SimpleEntry<String, String>> differences = PropertyUtils.getSymmetricPropertyValueDifference(a, b);
 
         comparisonResultBuilder.setSymmetricDifferencePropertyValues(differences);
     }
@@ -87,7 +87,7 @@ public class CompareProperties {
 
     private void findIntersectionInPropertyValues() {
 
-        Map<String, String> intersection = PropertyUtils.getIntersectionOfPropertyValues(first, second);
+        Map<String, String> intersection = PropertyUtils.getIntersectionOfPropertyValues(a, b);
 
         comparisonResultBuilder.setIntersectionPropertyValues(intersection);
     }

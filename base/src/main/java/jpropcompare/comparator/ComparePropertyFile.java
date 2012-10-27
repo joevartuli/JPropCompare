@@ -16,8 +16,8 @@ import java.util.Properties;
  */
 public class ComparePropertyFile {
 
-    private Properties propertyFileOne;
-    private Properties propertyFileTwo;
+    private Properties a;
+    private Properties b;
     private Action action;
     private Output output;
 
@@ -33,23 +33,20 @@ public class ComparePropertyFile {
 
     /**
      * Initialises this class with a the two files of the property file, action to perform and an output class
-     * @param fileOne - file representing the first property file used in the comparison.
-     * @param fileTwo - file representing the second property file used in the comparison.
+     * @param a - file representing the first property file used in the comparison.
+     * @param b - file representing the second property file used in the comparison.
      * @param action - action to perform on the property files
      * @param output - where to output the results
      */
-    public ComparePropertyFile(File fileOne, File fileTwo, Action action, Output output) {
+    public ComparePropertyFile(Reader a, Reader b, Action action, Output output) {
         this((Properties)null, (Properties)null, action, output);
 
         try {
-            FileReader fileReaderOne = new FileReader(fileOne);
-            FileReader fileReaderTwo = new FileReader(fileTwo);
+            this.a = new Properties();
+            this.a.load(a);
 
-            propertyFileOne = new Properties();
-            propertyFileOne.load(fileReaderOne);
-
-            propertyFileTwo = new Properties();
-            propertyFileTwo.load(fileReaderTwo);
+            this.b = new Properties();
+            this.b.load(b);
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Could not find file", e);
         } catch (IOException e) {
@@ -61,16 +58,16 @@ public class ComparePropertyFile {
     /**
      *
      * Initialises this class with a the two property files, the action to perform and an output class
-     * @param propertiesOne - first property file used in the comparison
-     * @param propertiesTwo - second property file used in the comparison
+     * @param a - first property file used in the comparison
+     * @param b - second property file used in the comparison
      * @param action - action to perform on the property files
      * @param output - where to output the results
      */
-    public ComparePropertyFile(Properties propertiesOne, Properties propertiesTwo, Action action, Output output) {
+    public ComparePropertyFile(Properties a, Properties b, Action action, Output output) {
         this.action = action;
         this.output = output;
-        this.propertyFileOne = propertiesOne;
-        this.propertyFileTwo = propertiesTwo;
+        this.a = a;
+        this.b = b;
     }
 
     /**
@@ -95,7 +92,7 @@ public class ComparePropertyFile {
      * @return result of the comparison
      */
     private ComparisonResult comparePropertyFiles(boolean verbose) {
-        CompareProperties compareProperties = new CompareProperties(propertyFileOne, propertyFileTwo, action);
+        CompareProperties compareProperties = new CompareProperties(a, b, action);
 
         ComparisonResult comparisonResult = compareProperties.runComparison();
 

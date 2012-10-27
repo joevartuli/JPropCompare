@@ -1,5 +1,6 @@
 package jpropcompare;
 
+import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,21 +18,13 @@ public class ComparatorTest {
     private ByteArrayOutputStream byteArrayOutputStream;
     private PrintStream printStream;
 
-    private void tearDown()  {
-        comparator = null;
-        if (printStream != null) {
-            printStream.close();
-            printStream = null;
-            byteArrayOutputStream = null;
-        }
-    }
 
     @Test
     public void testComparatorWithNullArguments() {
         byteArrayOutputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(byteArrayOutputStream);
         comparator = new Comparator(printStream);
-        
+
         String[] args = {};
 
         comparator.run(args);
@@ -40,8 +33,6 @@ public class ComparatorTest {
         String errorMsg = byteArrayOutputStream.toString();
 
         assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
-
-        tearDown();
     }
 
     @Test
@@ -58,8 +49,6 @@ public class ComparatorTest {
         String errorMsg = byteArrayOutputStream.toString();
 
         assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
-
-        tearDown();
     }
 
     @Test
@@ -76,8 +65,6 @@ public class ComparatorTest {
         String errorMsg = byteArrayOutputStream.toString();
 
         assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
-
-        tearDown();
     }
 
     @Test
@@ -94,11 +81,9 @@ public class ComparatorTest {
         String errorMsg = byteArrayOutputStream.toString();
 
         assertEquals(expectedErrorMsg, errorMsg.substring(0, expectedErrorMsg.length()));
-
-        tearDown();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testComparatorWithCorrectArguments() {
         byteArrayOutputStream = new ByteArrayOutputStream();
         printStream = new PrintStream(byteArrayOutputStream);
@@ -107,8 +92,16 @@ public class ComparatorTest {
         String[] args = {"-p1", "p1", "-p2", "p2", "-a", "4"};
 
         comparator.run(args);
+    }
 
-        tearDown();
+    @After
+    public void tearDown()  {
+        comparator = null;
+        if (printStream != null) {
+            printStream.close();
+            printStream = null;
+            byteArrayOutputStream = null;
+        }
     }
 
 

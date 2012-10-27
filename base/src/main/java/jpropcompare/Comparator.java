@@ -10,22 +10,22 @@ import jpropcompare.output.ConsoleOutput;
 import jpropcompare.output.FileOutput;
 import jpropcompare.output.Output;
 
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintStream;
 
 /**
  * The Comparator class provides access to the ComparePropertyFile tool via the command line.
  * Author: Joe Vartuli
  * Date: 19/09/11
- * 
  */
 public class Comparator {
 
     private PrintStream out = null;
     private Action action = null;
     private String actionName = null;
-    private String propertyName1 = null;
-    private String propertyName2 = null;
+    private String fileA = null;
+    private String fileB = null;
     private LoadingStrategy loadingStrategy = null;
     private String loadingStrategyClassName = null;
     private String[] args = null;
@@ -69,10 +69,10 @@ public class Comparator {
                 if (nextArgument != null) {
                     switch (nextArgument) {
                         case PROPERTY_1:
-                            propertyName1 = arg;
+                            fileA = arg;
                             break;
                         case PROPERTY_2:
-                            propertyName2 = arg;
+                            fileB = arg;
                             break;
                         case LOADING_STRATEGY:
                             loadingStrategyClassName = arg;
@@ -98,6 +98,7 @@ public class Comparator {
 
     /**
      * Instantiates the ComparePropertyFile object
+     *
      * @return true if the ComparePropertyFile object was instantiated correctly, otherwise false
      */
     private void instantiateComparisonTool() throws ComparatorException {
@@ -111,28 +112,31 @@ public class Comparator {
             determineActionToPerform();
         }
 
-        File fileOne = new File(propertyName1);
-        File fileTwo = new File(propertyName2);
-        String fileOneName = fileOne.getName();
-        String fileTwoName = fileTwo.getName();
+        try {
+            FileReader fileReaderA = new FileReader(fileA);
+            FileReader fileReaderB = new FileReader(fileB);
+            Output output;
+            if (outputFilename != null) {
+                output = new FileOutput(outputFilename, fileA, fileB);
+            } else {
+                output = new ConsoleOutput(fileA, fileB);
+            }
 
-        Output output;
-        if (outputFilename != null) {
-            output = new FileOutput(outputFilename, fileOneName, fileTwoName);
-        } else {
-            output = new ConsoleOutput(fileOneName, fileTwoName);
+            if (loadingStrategy != null) {
+                comparePropertyFile = new ComparePropertyFile(loadingStrategy, action, output);
+            } else {
+                comparePropertyFile = new ComparePropertyFile(fileReaderA, fileReaderB, action, output);
+            }
+        } catch (FileNotFoundException e) {
+            throw new ComparatorException(e);
         }
 
-        if (loadingStrategy != null) {
-            comparePropertyFile = new ComparePropertyFile(loadingStrategy, action, output);
-        } else {
-            comparePropertyFile = new ComparePropertyFile(fileOne, fileTwo, action, output);
-        }
     }
 
     /**
      * If a Loading Strategy class is provided attempt to instantiate the class and ensure it implements
      * the LoadingStrategy interface
+     *
      * @throws LoadingStrategyException
      */
     private void instantiateLoadingStrategy() throws LoadingStrategyException {
@@ -141,7 +145,7 @@ public class Comparator {
             if (LoadingStrategy.class.isAssignableFrom(loadedClass)) {
                 try {
                     loadingStrategy = (LoadingStrategy) loadedClass.newInstance();
-                    loadingStrategy.initialise(propertyName1, propertyName2, args);
+                    loadingStrategy.initialise(fileA, fileB, args);
                 } catch (InstantiationException e) {
                     throw new LoadingStrategyException(Constants.CLASS_NOT_CREATED.replace(Constants.CLASS_SUBSTITUTE, loadingStrategyClassName), e);
                 } catch (IllegalAccessException e) {
@@ -157,6 +161,7 @@ public class Comparator {
 
     /**
      * Determines the action to perform on the given property files
+     *
      * @throws ActionNotFoundException
      */
     private void determineActionToPerform() throws ActionNotFoundException {
@@ -167,7 +172,7 @@ public class Comparator {
     }
 
     /**
-     *  Prints the help message
+     * Prints the help message
      */
     private void printHelpMessage() {
         StringBuilder stringBuilder = new StringBuilder("Usage: java - jar <JAR_FILE> -p1 <FILE_NAME> -p2 <FILE_NAME> [-ls <LOADING_STRATEGY>] [-a <ACTION>]" + Constants.NEW_LINE);
@@ -177,22 +182,23 @@ public class Comparator {
         stringBuilder.append("       If this is used the values of p1 and p2 are injected into the class" + Constants.NEW_LINE);
         stringBuilder.append("       as a way for you to load different property structures in different ways." + Constants.NEW_LINE);
         stringBuilder.append("  -a: action to perform. Possible values" + Constants.NEW_LINE);
-        
-        for (Action possibleAction : Action.values())  {
-            stringBuilder.append("      " + possibleAction.getActionValue() + ": " + possibleAction.getActionDescription() +  Constants.NEW_LINE);
+
+        for (Action possibleAction : Action.values()) {
+            stringBuilder.append("      " + possibleAction.getActionValue() + ": " + possibleAction.getActionDescription() + Constants.NEW_LINE);
         }
         out.println(stringBuilder.toString());
     }
 
     /**
      * Validates the given command line arguments
+     *
      * @throws ComparatorException
      */
     private void validateArguments() throws ComparatorException {
-        if (propertyName1 == null) {
+        if (fileA == null) {
             throw new ComparatorException("First property name file can not be null");
         }
-        if (propertyName2 == null) {
+        if (fileB == null) {
             throw new ComparatorException("Second property name file can not be null");
         }
     }
@@ -230,6 +236,7 @@ public class Comparator {
 
     /**
      * Main method used to instantiate the comparison tool
+     *
      * @param args - command line arguments
      */
     public static void main(String... args) {
