@@ -47,10 +47,8 @@ public class ComparePropertyFile {
 
             this.b = new Properties();
             this.b.load(b);
-        } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("Could not find file", e);
         } catch (IOException e) {
-            throw new IllegalArgumentException("An exception occurred when loading file", e);
+            throw new IllegalArgumentException("An exception occurred whilst reading input", e);
         }
 
     }
