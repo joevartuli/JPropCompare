@@ -1,7 +1,7 @@
 package jpropcompare;
 
 import jpropcompare.comparator.Action;
-import jpropcompare.comparator.ComparePropertyFile;
+import jpropcompare.comparator.CompareProperties;
 import jpropcompare.exception.ActionNotFoundException;
 import jpropcompare.exception.ComparatorException;
 import jpropcompare.exception.LoadingStrategyException;
@@ -15,7 +15,7 @@ import java.io.FileReader;
 import java.io.PrintStream;
 
 /**
- * The Comparator class provides access to the ComparePropertyFile tool via the command line.
+ * The Comparator class provides access to the CompareProperties tool via the command line.
  * Author: Joe Vartuli
  * Date: 19/09/11
  */
@@ -31,7 +31,7 @@ public class Comparator {
     private String[] args = null;
     private String outputFilename = null;
 
-    private ComparePropertyFile comparePropertyFile;
+    private CompareProperties compareProperties;
 
     public Comparator(PrintStream out) {
         action = Action.getDefaultAction();
@@ -48,7 +48,7 @@ public class Comparator {
 
         try {
             instantiateComparisonTool();
-            comparePropertyFile.runComparison();
+            compareProperties.runComparison();
 
         } catch (ComparatorException comparatorException) {
             out.println(comparatorException.getMessage() + Constants.NEW_LINE);
@@ -97,9 +97,9 @@ public class Comparator {
     }
 
     /**
-     * Instantiates the ComparePropertyFile object
+     * Instantiates the CompareProperties object
      *
-     * @return true if the ComparePropertyFile object was instantiated correctly, otherwise false
+     * @return true if the CompareProperties object was instantiated correctly, otherwise false
      */
     private void instantiateComparisonTool() throws ComparatorException {
 
@@ -123,9 +123,9 @@ public class Comparator {
             }
 
             if (loadingStrategy != null) {
-                comparePropertyFile = new ComparePropertyFile(loadingStrategy, action, output);
+                compareProperties = new CompareProperties(loadingStrategy, action, output);
             } else {
-                comparePropertyFile = new ComparePropertyFile(fileReaderA, fileReaderB, action, output);
+                compareProperties = new CompareProperties(fileReaderA, fileReaderB, action, output);
             }
         } catch (FileNotFoundException e) {
             throw new ComparatorException(e);

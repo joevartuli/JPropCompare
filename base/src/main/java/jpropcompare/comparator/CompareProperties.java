@@ -1,95 +1,86 @@
 package jpropcompare.comparator;
 
-import jpropcompare.utilities.PropertyUtils;
+import jpropcompare.loading.strategy.LoadingStrategy;
+import jpropcompare.output.Output;
 
-import java.util.*;
-import static java.util.AbstractMap.*;
+import java.io.*;
+import java.util.Properties;
 
 /**
- * The CompareProperties class allows two properties files to be compared with the supplied action
- * This class is for internal use only. See {@link ComparePropertyFile} for external use
- * User: Joe Vartuli
- * Date: 24/10/11
+ * CompareProperties is the main class that provides comparison
+ * functionality.
+ *
+ * Author: Joe Vartuli
+ * Date: 19/09/11
+ * @since 1.0
  */
 public class CompareProperties {
 
     private Properties a;
     private Properties b;
     private Action action;
-    private ComparisonResultBuilder comparisonResultBuilder;
+    private Output output;
 
-    protected CompareProperties(Properties a, Properties b, Action action) {
+    /**
+     * Initialises this class with a loading strategy, action to perform and an output class
+     * @param strategy - loading strategy used to create the custom property files required
+     * @param action - action to perform on the property files
+     * @param output - where to output the results
+     */
+    public CompareProperties(LoadingStrategy strategy, Action action, Output output) {
+        this(strategy.getPropertyFileOne(), strategy.getPropertyFileTwo(), action, output);
+    }
+
+    /**
+     * Initialises this class with a the two files of the property file, action to perform and an output class
+     * @param a - file representing the first property file used in the comparison.
+     * @param b - file representing the second property file used in the comparison.
+     * @param action - action to perform on the property files
+     * @param output - where to output the results
+     */
+    public CompareProperties(Reader a, Reader b, Action action, Output output) {
+        this((Properties)null, (Properties)null, action, output);
+
+        try {
+            this.a = new Properties();
+            this.a.load(a);
+
+            this.b = new Properties();
+            this.b.load(b);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("An exception occurred whilst reading input", e);
+        }
+
+    }
+
+    /**
+     *
+     * Initialises this class with a the two property files, the action to perform and an output class
+     * @param a - first property file used in the comparison
+     * @param b - second property file used in the comparison
+     * @param action - action to perform on the property files
+     * @param output - where to output the results
+     */
+    public CompareProperties(Properties a, Properties b, Action action, Output output) {
         this.action = action;
+        this.output = output;
         this.a = a;
         this.b = b;
-        this.comparisonResultBuilder = new ComparisonResultBuilder();
     }
 
     /**
      * Executes the specific action over the given property files
-     *
      * @return Object representing the result of the comparison
      */
-     ComparisonResult runComparison() {
-        ComparisonResult result;
+    public ComparisonResult runComparison() {
+        ComparisonRunner comparisonRunner = new ComparisonRunner(a, b, action);
 
-        switch (action) {
-            case SYMMETRIC_DIFFERENCE_IN_NAME:
-                findSymmetricDifferenceInPropertyNames();
-                break;
-            case SYMMETRIC_DIFFERENCE_IN_VALUE:
-                findSymmetricDifferenceInPropertyValues();
-                break;
-            case INTERSECTION_OF_VALUES:
-                findIntersectionInPropertyValues();
-                break;
-            case UNION_IN_NAME:
-                break;
-            case UNION_IN_VALUE:
-                break;
+        ComparisonResult comparisonResult = comparisonRunner.runComparison();
+
+        if (output!= null) {
+            output.outputResult(comparisonResult);
         }
-
-        result = comparisonResultBuilder.build();
-
-        return result;
-    }
-
-    /**
-     * Finds the unique property names in each file regardless of their value. Useful
-     * for determining property differences between environment properties where you would normally
-     * expect values to be different but have property names consistent
-     */
-    private void findSymmetricDifferenceInPropertyNames() {
-
-        Set<String> propertyNamesFromFirst = a.stringPropertyNames();
-        Set<String> propertyNamesFromSecond = b.stringPropertyNames();
-
-        List<String> uniqueToFirst = PropertyUtils.getSymmetricDifference(propertyNamesFromFirst, propertyNamesFromSecond);
-        List<String> uniqueToSecond = PropertyUtils.getSymmetricDifference(propertyNamesFromSecond, propertyNamesFromFirst);
-
-        comparisonResultBuilder.setUniqueToPropertyOne(uniqueToFirst).setUniqueToPropertyTwo(uniqueToSecond);
-    }
-
-    /**
-     * In addition to finding unique property names in each file, compare property values
-     * will also render the property names where the values are different from the a
-     * and b property file.
-     */
-    private void findSymmetricDifferenceInPropertyValues() {
-
-        findSymmetricDifferenceInPropertyNames();
-
-        Map<String, SimpleEntry<String, String>> differences = PropertyUtils.getSymmetricPropertyValueDifference(a, b);
-
-        comparisonResultBuilder.setSymmetricDifferencePropertyValues(differences);
-    }
-
-
-    private void findIntersectionInPropertyValues() {
-
-        Map<String, String> intersection = PropertyUtils.getIntersectionOfPropertyValues(a, b);
-
-        comparisonResultBuilder.setIntersectionPropertyValues(intersection);
+        return comparisonResult;
     }
 
 }

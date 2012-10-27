@@ -1,6 +1,5 @@
 package jpropcompare.comparator;
 
-import jpropcompare.output.StringOutput;
 import jpropcompare.utilities.PropertyUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +14,9 @@ import static org.junit.Assert.*;
  * User: Joe Vartuli
  * Date: 24/10/11
  */
-public class ComparePropertiesTest {
+public class ComparisonRunnerTest {
 
-    private CompareProperties compareProperties;
+    private ComparisonRunner comparisonRunner;
 
     private Properties propertyOne;
     private Properties copyOfPropertyOne;
@@ -36,13 +35,13 @@ public class ComparePropertiesTest {
     }
 
     public void tearDown() {
-        compareProperties = null;
+        comparisonRunner = null;
     }
 
     @Test
     public void testFileWithNoDifference() {
-        compareProperties = new CompareProperties(propertyOne, copyOfPropertyOne, Action.SYMMETRIC_DIFFERENCE_IN_NAME);
-        ComparisonResult result = compareProperties.runComparison();
+        comparisonRunner = new ComparisonRunner(propertyOne, copyOfPropertyOne, Action.SYMMETRIC_DIFFERENCE_IN_NAME);
+        ComparisonResult result = comparisonRunner.runComparison();
 
         assertTrue(result.getUniqueToPropertyOne().isEmpty());
         assertTrue(result.getUniqueToPropertyTwo().isEmpty());
@@ -52,8 +51,8 @@ public class ComparePropertiesTest {
 
     @Test
     public void testUniqueNameWithDifferences() {
-        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.SYMMETRIC_DIFFERENCE_IN_NAME);
-        ComparisonResult result = compareProperties.runComparison();
+        comparisonRunner = new ComparisonRunner(propertyOne, propertyTwo, Action.SYMMETRIC_DIFFERENCE_IN_NAME);
+        ComparisonResult result = comparisonRunner.runComparison();
 
         List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
         List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
@@ -66,8 +65,8 @@ public class ComparePropertiesTest {
 
     @Test
     public void testValuesWithDifference() {
-        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.SYMMETRIC_DIFFERENCE_IN_VALUE);
-        ComparisonResult result = compareProperties.runComparison();
+        comparisonRunner = new ComparisonRunner(propertyOne, propertyTwo, Action.SYMMETRIC_DIFFERENCE_IN_VALUE);
+        ComparisonResult result = comparisonRunner.runComparison();
 
         List<String> expectedFromOne = Arrays.asList("one.unique.property.1", "two.unique.property.1", "three.unique.property.1", "four.unique.property.1");
         List<String> expectedFromTwo = Arrays.asList("one.unique.property.2", "two.unique.property.2", "three.unique.property.2", "four.unique.property.2");
@@ -87,8 +86,8 @@ public class ComparePropertiesTest {
 
     @Test
     public void testIntersectionOfValues() {
-        compareProperties = new CompareProperties(propertyOne, propertyTwo, Action.INTERSECTION_OF_VALUES);
-        ComparisonResult result = compareProperties.runComparison();
+        comparisonRunner = new ComparisonRunner(propertyOne, propertyTwo, Action.INTERSECTION_OF_VALUES);
+        ComparisonResult result = comparisonRunner.runComparison();
 
         Map<String, String> intersection = new HashMap<String, String>();
         intersection.put("common.1", "one");

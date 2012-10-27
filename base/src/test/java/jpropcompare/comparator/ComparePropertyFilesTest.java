@@ -30,7 +30,7 @@ public class ComparePropertyFilesTest {
     private static Properties PROPERTY_1_COPY;
     private static Properties PROPERTY_2;
 
-    private ComparePropertyFile comparePropertyFile;
+    private CompareProperties compareProperties;
 
     @Before
     public void setUp() throws Exception {
@@ -50,14 +50,14 @@ public class ComparePropertyFilesTest {
     }
 
     public void tearDown() {
-        comparePropertyFile = null;
+        compareProperties = null;
     }
 
     @Test
     public void testRun() {
         StringOutput stringOutput = new StringOutput(PROPERTY1_PROPERTIES, PROPERTY2_PROPERTIES);
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1_FILE, PROPERTY_2_FILE, Action.SYMMETRIC_DIFFERENCE_IN_VALUE, stringOutput);
-        comparePropertyFile.runComparison();
+        compareProperties = new CompareProperties(PROPERTY_1_FILE, PROPERTY_2_FILE, Action.SYMMETRIC_DIFFERENCE_IN_VALUE, stringOutput);
+        compareProperties.runComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
     }
@@ -73,23 +73,23 @@ public class ComparePropertyFilesTest {
 
         replay(loadingStrategy);
 
-        comparePropertyFile = new ComparePropertyFile(loadingStrategy, SYMMETRIC_DIFFERENCE_IN_NAME, stringOutput);
-        comparePropertyFile.runComparison();
+        compareProperties = new CompareProperties(loadingStrategy, SYMMETRIC_DIFFERENCE_IN_NAME, stringOutput);
+        compareProperties.runComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty1IsNull() {
-        comparePropertyFile = new ComparePropertyFile(null, PROPERTY_1_COPY_FILE, SYMMETRIC_DIFFERENCE_IN_NAME, null);
-        comparePropertyFile.runComparison();
+        compareProperties = new CompareProperties(null, PROPERTY_1_COPY_FILE, SYMMETRIC_DIFFERENCE_IN_NAME, null);
+        compareProperties.runComparison();
         tearDown();
     }
 
     @Test(expected = NullPointerException.class)
     public void testProperty2IsNull() {
-        comparePropertyFile = new ComparePropertyFile(PROPERTY_1_FILE, null, SYMMETRIC_DIFFERENCE_IN_NAME, null);
-        comparePropertyFile.runComparison();
+        compareProperties = new CompareProperties(PROPERTY_1_FILE, null, SYMMETRIC_DIFFERENCE_IN_NAME, null);
+        compareProperties.runComparison();
         tearDown();
     }
 
