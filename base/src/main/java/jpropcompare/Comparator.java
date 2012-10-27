@@ -48,7 +48,7 @@ public class Comparator {
 
         try {
             instantiateComparisonTool();
-            comparePropertyFile.runVerboseComparison();
+            comparePropertyFile.runComparison();
 
         } catch (ComparatorException comparatorException) {
             out.println(comparatorException.getMessage() + Constants.NEW_LINE);

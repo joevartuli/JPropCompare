@@ -73,28 +73,11 @@ public class ComparePropertyFile {
      * @return Object representing the result of the comparison
      */
     public ComparisonResult runComparison() {
-        return comparePropertyFiles(false);
-    }
-
-    /**
-     * Executes the specific action over the given property files
-     * using an output to display the results
-     */
-    public void runVerboseComparison() {
-        comparePropertyFiles(true);
-    }
-
-    /**
-     * Runs the actions on the property files
-     * @param verbose - determines whether or not the result should be outputted
-     * @return result of the comparison
-     */
-    private ComparisonResult comparePropertyFiles(boolean verbose) {
         CompareProperties compareProperties = new CompareProperties(a, b, action);
 
         ComparisonResult comparisonResult = compareProperties.runComparison();
 
-        if (verbose) {
+        if (output!= null) {
             output.outputResult(comparisonResult);
         }
         return comparisonResult;

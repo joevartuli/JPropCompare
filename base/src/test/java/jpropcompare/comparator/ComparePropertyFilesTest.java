@@ -57,8 +57,7 @@ public class ComparePropertyFilesTest {
     public void testRun() {
         StringOutput stringOutput = new StringOutput(PROPERTY1_PROPERTIES, PROPERTY2_PROPERTIES);
         comparePropertyFile = new ComparePropertyFile(PROPERTY_1_FILE, PROPERTY_2_FILE, Action.SYMMETRIC_DIFFERENCE_IN_VALUE, stringOutput);
-        comparePropertyFile.runVerboseComparison();
-        //System.out.println(stringOutput.result());
+        comparePropertyFile.runComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
     }
@@ -75,7 +74,7 @@ public class ComparePropertyFilesTest {
         replay(loadingStrategy);
 
         comparePropertyFile = new ComparePropertyFile(loadingStrategy, SYMMETRIC_DIFFERENCE_IN_NAME, stringOutput);
-        comparePropertyFile.runVerboseComparison();
+        comparePropertyFile.runComparison();
         assertFalse(stringOutput.result().isEmpty());
         tearDown();
     }
